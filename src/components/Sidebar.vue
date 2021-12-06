@@ -7,7 +7,7 @@
             <b-nav vertical>
                 <b-nav-item>
                     <router-link to="/CreateAppointment">
-                        <b-button class="btn btn-success"> + Ranevu Oluştur</b-button>
+                        <b-button class="btn" variant="primary"> + Ranevu Oluştur</b-button>
                     </router-link>
                 </b-nav-item>
                 <b-nav-item>
@@ -16,7 +16,9 @@
                     </router-link>
                 </b-nav-item>
                 <b-nav-item>
+                  <router-link to="/Appointments">
                     <b-button class="btn">Randevular</b-button>
+                  </router-link>
                 </b-nav-item>
             </b-nav>
         </div>
