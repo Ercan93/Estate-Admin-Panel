@@ -4,12 +4,15 @@ import router from './router'
 import store from './store'
 import './plugins/bootstrap-vue'
 import './plugins/axios'
+import base from './plugins/airtable'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import VCalendar from 'v-calendar';
 import 'mutationobserver-shim'
 import '@babel/polyfill'
 
 Vue.config.productionTip = false
+
+Vue.prototype.base = base
 
 Vue.use(VCalendar, {
   componentPrefix: 'vc'
