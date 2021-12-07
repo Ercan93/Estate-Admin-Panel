@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid d-flex flex-column align-items-center">
-    <p class="col-8 display-4 mt-4">Create New Appointment</p>
+    <p class="col-6 display-4 mt-4">Create New Appointment</p>
     <div class="col-9">
       <b-form @submit="onSubmit" @reset="onReset">
         <b-form-group
@@ -53,19 +53,7 @@
           ></b-form-input>
         </b-form-group>
 
-        <div class="my-4">
-          <p>Select Date and Time:</p>
-          <vc-date-picker v-model="date" mode="dateTime">
-            <template v-slot="{ inputValue, inputEvents }">
-              <input
-                class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
-                :value="inputValue"
-                v-on="inputEvents"
-                required
-              />
-            </template>
-          </vc-date-picker>
-        </div>
+        <AppCalendar />
 
         <GoogleMap />
 
@@ -81,6 +69,7 @@
 </template>
 <script>
 import GoogleMap from "@/components/maps/GoogleMap";
+import AppCalendar from "@/components/AppCalendar";
 export default {
   data() {
     return {
@@ -91,16 +80,15 @@ export default {
         user: null,
       },
       users: ["Jason D.", "Micheal F.", "Anna B.", "Tommy K."],
-      date: new Date(),
     };
   },
   components: {
     GoogleMap,
+    AppCalendar
   },
   methods: {
     onSubmit(event) {
       event.preventDefault();
-      console.log(JSON.stringify(this.form));
     },
     onReset(event) {
       event.preventDefault();
