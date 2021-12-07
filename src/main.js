@@ -1,11 +1,12 @@
-import '@babel/polyfill'
-import 'mutationobserver-shim'
 import Vue from 'vue'
-import './plugins/bootstrap-vue'
-import VCalendar from 'v-calendar';
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import './plugins/bootstrap-vue'
+import './plugins/axios'
+import VCalendar from 'v-calendar';
+import 'mutationobserver-shim'
+import '@babel/polyfill'
 
 Vue.config.productionTip = false
 
