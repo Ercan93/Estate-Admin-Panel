@@ -17,6 +17,8 @@
 import { mapActions } from "vuex";
 
 export default {
+  name: "AppCalendar",
+  props: ["dateValue", "timeValue"],
   data() {
     return {
       date: new Date(),
@@ -28,7 +30,7 @@ export default {
   watch: {
     date(newDate) {
       let date = `${newDate.getDate()}-${newDate.getMonth()}-${newDate.getFullYear()}`;
-      let time = `${newDate.getHours()}:${newDate.getMinutes()}`
+      let time = `${newDate.getHours()}:${newDate.getMinutes()}`;
       this.setAppointmentDate({ date, time });
     },
   },
