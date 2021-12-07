@@ -9,6 +9,8 @@ export default new Vuex.Store({
       address: '',
       date: '',
       time: '',
+      duration:'',
+      distance:''
     },
   },
   getters: {
@@ -25,6 +27,10 @@ export default new Vuex.Store({
       state.appointment.date = payload.date;
       state.appointment.time = payload.time;
     },
+    SET_APPOINTMENT_DISTANCE(state, payload) {
+      state.appointment.distance = payload.distance;
+      state.appointment.duration = payload.duration;
+    }
   },
   actions: {
     setAppointmentAddress({ commit }, payload) {
@@ -33,6 +39,9 @@ export default new Vuex.Store({
     setAppointmentDate({ commit }, payload) {
       commit("SET_APPOINTMENT_DATE", payload);
     },
+    setAppointmentDistance({commit }, payload) {
+      commit("SET_APPOINTMENT_DISTANCE", payload)
+    }
   },
   modules: {},
 });
