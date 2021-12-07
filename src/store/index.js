@@ -1,15 +1,38 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    appointment: {
+      address: '',
+      date: '',
+      time: '',
+    },
+  },
+  getters: {
+    appointmentGetter(state) {
+      return state.appointment;
+    },
   },
   mutations: {
+    SET_APPOINTMENT_ADDRESS(state, payload) {
+      state.appointment.address = payload;
+    },
+    SET_APPOINTMENT_DATE(state, payload) {
+      console.log(payload);
+      state.appointment.date = payload.date;
+      state.appointment.time = payload.time;
+    },
   },
   actions: {
+    setAppointmentAddress({ commit }, payload) {
+      commit("SET_APPOINTMENT_ADDRESS", payload);
+    },
+    setAppointmentDate({ commit }, payload) {
+      commit("SET_APPOINTMENT_DATE", payload);
+    },
   },
-  modules: {
-  }
-})
+  modules: {},
+});
