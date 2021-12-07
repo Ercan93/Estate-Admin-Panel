@@ -9,7 +9,8 @@
         />
         <button
           class="col-3 col-lg-2 btn btn-secondary mt-1"
-          @click="addMarker"
+          type="button"
+          @click.prevent="addMarker"
         >
           Add
         </button>
@@ -61,7 +62,7 @@ export default {
     this.proxy = process.env.VUE_APP_PROXY_URL;
   },
   methods: {
-    ...mapActions(["setAppointmentAddress"]),
+    ...mapActions(["setAppointmentAddress", "setAppointmentDistance"]),
 
     setPlace(place) {
       this.currentPlace = place;
@@ -102,6 +103,10 @@ export default {
           let elements = response.data.rows[0].elements[0];
           vm.duration = elements.duration.text;
           vm.distance = elements.distance.text;
+          vm.setAppointmentDistance({
+            duration: vm.duration,
+            distance: vm.distance,
+          });
         })
         .catch((error) => {
           alert(error);
