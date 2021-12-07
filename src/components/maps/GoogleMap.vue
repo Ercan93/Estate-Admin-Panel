@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
+  <div class="container mx-0 px-0">
     <div>
-      <h2>Search Location</h2>
+      <h4>Search Location</h4>
       <div class="d-flex flex-wrap justify-content-between">
         <GmapAutocomplete class="col-12 col-lg-10 mt-1" @place_changed="setPlace" />
         <button class="col-3 col-lg-2 btn btn-secondary mt-1" @click="addMarker">Add</button>
@@ -15,11 +15,11 @@
         :destination="destination"
       />
     </GmapMap>
-    <div class="d-flex mt-3">
-      <p class="h4 mr-5" >DRIVING;</p>
+    <b-alert class="d-flex flex-wrap align-items-center my-3 text-black-50" variant="info" show>
+      <p class="h4 mr-5 font-weight-bolder" >DRIVING</p>
       <p class="h5 mr-5" >Duration: {{ duration }}</p>
       <p class="h5 mr-5" >Distance: {{ distance }}</p>
-    </div>
+    </b-alert>
   </div>
 </template>
 
