@@ -42,7 +42,7 @@
       ></b-form-input>
     </b-form-group>
 
-    <AppCalendar :dateTime="formDefaults.dateTime" />
+    <AppCalendar :dateValue="formDefaults.date" :timeValue="formDefaults.time" />
 
     <GoogleMap :addressCode="formDefaults.addressCode" />
 

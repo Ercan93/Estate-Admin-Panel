@@ -30,10 +30,8 @@ export default {
         employee: '',
         employees: ["Jason D.", "Micheal F.", "Anna B.", "Tommy K."],
         addressCode:'',
-        dateTime:{
-          date:'',
-          time:'',
-        }
+        date:'',
+        time:'',
       },
     };
   },
