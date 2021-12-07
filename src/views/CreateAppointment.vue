@@ -2,7 +2,7 @@
   <div class="container-fluid d-flex flex-column align-items-center">
     <p class="col-6 display-4 mt-4">Create New Appointment</p>
     <div class="col-9">
-      <b-form @submit="onSubmit" @reset="onReset">
+      <b-form @submit.prevent="onSubmit" @reset="onReset">
         <b-form-group
           id="input-group-1"
           label="Client Name Surname:"
@@ -16,11 +16,7 @@
           ></b-form-input>
         </b-form-group>
 
-        <b-form-group
-          id="input-group-2"
-          label="Email:"
-          label-for="input-2"
-        >
+        <b-form-group id="input-group-2" label="Email:" label-for="input-2">
           <b-form-input
             id="input-2"
             v-model="form.email"
@@ -33,17 +29,13 @@
         <b-form-group id="input-group-3" label="Employees:" label-for="input-3">
           <b-form-select
             id="input-3"
-            v-model="form.user"
-            :options="users"
+            v-model="form.employee"
+            :options="employees"
             required
           ></b-form-select>
         </b-form-group>
 
-        <b-form-group
-          id="input-group-4"
-          label="Phone:"
-          label-for="input-4"
-        >
+        <b-form-group id="input-group-4" label="Phone:" label-for="input-4">
           <b-form-input
             id="input-4"
             v-model="form.phone"
@@ -70,6 +62,7 @@
 <script>
 import GoogleMap from "@/components/maps/GoogleMap";
 import AppCalendar from "@/components/AppCalendar";
+import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
@@ -77,18 +70,57 @@ export default {
         email: "",
         name: "",
         phone: null,
-        user: null,
+        employee: null,
       },
-      users: ["Jason D.", "Micheal F.", "Anna B.", "Tommy K."],
+      employees: ["Jason D.", "Micheal F.", "Anna B.", "Tommy K."],
     };
   },
   components: {
     GoogleMap,
-    AppCalendar
+    AppCalendar,
+  },
+  computed: {
+    ...mapGetters(['appointmentGetter'])
   },
   methods: {
-    onSubmit(event) {
-      event.preventDefault();
+    makeToast() {
+      this.$bvToast.toast('New Appointment created successfully', {
+        title:"Heee!",
+        variant: 'success',
+        toaster: 'b-toaster-top-full',
+        solid: true
+      })
+    },
+    onSubmit() {
+      let appointmentData = this.appointmentGetter
+      let vm = this
+      this.base("Appointments").create(
+        [
+          {
+            fields: {
+              "Client": this.form.name,
+              "Client Email": this.form.email,
+              "Client Phone": this.form.phone,
+              "Employee": this.form.employee,
+              "Appointment Address": appointmentData.address,
+              "Appointment Date": appointmentData.date,
+              "Appointment Time": appointmentData.time,
+              "Driving Time": appointmentData.duration,
+              "Driving Distance": appointmentData.distance,
+            },
+          },
+        ],
+        function (err, records) {
+          if (err) {
+            console.error(err);
+            return;
+          }
+          vm.makeToast('success')
+          records.forEach(function (record) {
+            console.log(record.getId());
+          });
+        }
+      );
     },
     onReset(event) {
       event.preventDefault();
