@@ -1,0 +1,108 @@
+<template>
+  <div class="container">
+    <div>
+      <h2>Search Location</h2>
+      <div class="d-flex flex-wrap justify-content-between">
+        <GmapAutocomplete class="col-12 col-lg-10 mt-1" @place_changed="setPlace" />
+        <button class="col-3 col-lg-2 btn btn-secondary mt-1" @click="addMarker">Add</button>
+      </div>
+    </div>
+    <br />
+    <GmapMap :center="origin" :zoom="12" style="width: 100%; height: 400px">
+      <DirectionsRenderer
+        travelMode="DRIVING"
+        :origin="origin"
+        :destination="destination"
+      />
+    </GmapMap>
+    <div class="d-flex mt-3">
+      <p class="h4 mr-5" >DRIVING;</p>
+      <p class="h5 mr-5" >Duration: {{ duration }}</p>
+      <p class="h5 mr-5" >Distance: {{ distance }}</p>
+    </div>
+  </div>
+</template>
+
+<script>
+import DirectionsRenderer from "./DirectionsRenderer.js";
+export default {
+  name: "GoogleMap",
+  data() {
+    return {
+      currentPlace: null,
+      origin: {
+        lat: 51.729157,
+        lng: 0.478027,
+      },
+      destination: null,
+      duration: '0',
+      distance: '0',
+      postcodes: {
+        origin: "",
+        destination: "",
+      },
+      proxy: "",
+    };
+  },
+  components: {
+    DirectionsRenderer,
+  },
+  created() {
+    this.proxy = process.env.VUE_APP_PROXY_URL;
+  },
+  methods: {
+    setPlace(place) {
+      this.currentPlace = place;
+    },
+
+    getPostcode() {
+      let url = "https://api.postcodes.io/postcodes?";
+      url = `${this.proxy}${url}lon=${this.destination.lng}&lat=${this.destination.lat}`;
+      let vm = this;
+      let config = {
+        url,
+        method: "GET",
+      };
+
+      this.axios(config)
+        .then((response) => {
+          vm.postcodes.destination = response.data.result[0].postcode;
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    },
+
+    getDuration() {
+      let distanceURL =
+        "https://maps.googleapis.com/maps/api/distancematrix/json?";
+      let originPlaceId = 'ChIJgZRHYn7p2EcRuzS6cN4ZwuM'
+      let url = `${this.proxy}${distanceURL}origins=place_id:${originPlaceId}&destinations=place_id:${this.currentPlace.place_id}&key=${process.env.VUE_APP_MAP_API_KEY}`;
+      let vm = this;
+      var config = {
+        url,
+        method: "GET",
+      };
+
+      this.axios(config)
+        .then((response) => {
+          let elements = response.data.rows[0].elements[0]
+          vm.duration = elements.duration.text
+          vm.distance = elements.distance.text
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    },
+
+    addMarker() {
+      this.destination = {
+        lat: this.currentPlace.geometry.location.lat(),
+        lng: this.currentPlace.geometry.location.lng(),
+      };
+      this.getDuration();
+      this.getPostcode();
+    },
+  },
+};
+</script>
