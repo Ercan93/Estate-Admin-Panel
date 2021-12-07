@@ -3,8 +3,16 @@
     <div>
       <h4>Search Location</h4>
       <div class="d-flex flex-wrap justify-content-between">
-        <GmapAutocomplete class="col-12 col-lg-10 mt-1" @place_changed="setPlace" />
-        <button class="col-3 col-lg-2 btn btn-secondary mt-1" @click="addMarker">Add</button>
+        <GmapAutocomplete
+          class="col-12 col-lg-10 mt-1"
+          @place_changed="setPlace"
+        />
+        <button
+          class="col-3 col-lg-2 btn btn-secondary mt-1"
+          @click="addMarker"
+        >
+          Add
+        </button>
       </div>
     </div>
     <br />
@@ -15,16 +23,21 @@
         :destination="destination"
       />
     </GmapMap>
-    <b-alert class="d-flex flex-wrap align-items-center my-3 text-black-50" variant="info" show>
-      <p class="h4 mr-5 font-weight-bolder" >DRIVING</p>
-      <p class="h5 mr-5" >Duration: {{ duration }}</p>
-      <p class="h5 mr-5" >Distance: {{ distance }}</p>
+    <b-alert
+      class="d-flex flex-wrap align-items-center my-3 text-black-50"
+      variant="info"
+      show
+    >
+      <p class="h4 mr-5 font-weight-bolder">DRIVING</p>
+      <p class="h5 mr-5">Duration: {{ duration }}</p>
+      <p class="h5 mr-5">Distance: {{ distance }}</p>
     </b-alert>
   </div>
 </template>
 
 <script>
 import DirectionsRenderer from "./DirectionsRenderer.js";
+import { mapActions } from "vuex";
 export default {
   name: "GoogleMap",
   data() {
@@ -35,12 +48,9 @@ export default {
         lng: 0.478027,
       },
       destination: null,
-      duration: '0',
-      distance: '0',
-      postcodes: {
-        origin: "",
-        destination: "",
-      },
+      duration: "0",
+      distance: "0",
+      destinationPostcode: null,
       proxy: "",
     };
   },
@@ -51,6 +61,8 @@ export default {
     this.proxy = process.env.VUE_APP_PROXY_URL;
   },
   methods: {
+    ...mapActions(["setAppointmentAddress"]),
+
     setPlace(place) {
       this.currentPlace = place;
     },
@@ -66,7 +78,8 @@ export default {
 
       this.axios(config)
         .then((response) => {
-          vm.postcodes.destination = response.data.result[0].postcode;
+          vm.destinationPostcode = response.data.result[0].postcode;
+          vm.setAppointmentAddress(vm.destinationPostcode);
         })
         .catch((error) => {
           alert(error);
@@ -76,7 +89,7 @@ export default {
     getDuration() {
       let distanceURL =
         "https://maps.googleapis.com/maps/api/distancematrix/json?";
-      let originPlaceId = 'ChIJgZRHYn7p2EcRuzS6cN4ZwuM'
+      let originPlaceId = "ChIJgZRHYn7p2EcRuzS6cN4ZwuM";
       let url = `${this.proxy}${distanceURL}origins=place_id:${originPlaceId}&destinations=place_id:${this.currentPlace.place_id}&key=${process.env.VUE_APP_MAP_API_KEY}`;
       let vm = this;
       var config = {
@@ -86,9 +99,9 @@ export default {
 
       this.axios(config)
         .then((response) => {
-          let elements = response.data.rows[0].elements[0]
-          vm.duration = elements.duration.text
-          vm.distance = elements.distance.text
+          let elements = response.data.rows[0].elements[0];
+          vm.duration = elements.duration.text;
+          vm.distance = elements.distance.text;
         })
         .catch((error) => {
           alert(error);
