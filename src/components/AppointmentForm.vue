@@ -42,9 +42,16 @@
       ></b-form-input>
     </b-form-group>
 
-    <AppCalendar :dateValue="formDefaults.date" :timeValue="formDefaults.time" />
+    <AppCalendar
+      :dateValue="formDefaults.date"
+      :timeValue="formDefaults.time"
+    />
 
-    <GoogleMap :addressCode="formDefaults.addressCode" />
+    <GoogleMap
+      :address="formDefaults.address"
+      :duration="formDefaults.duration"
+      :distance="formDefaults.distance"
+    />
 
     <slot name="submitButton"></slot>
     <slot name="resetButton"></slot>
@@ -54,10 +61,10 @@
 <script>
 import GoogleMap from "@/components/maps/GoogleMap";
 import AppCalendar from "@/components/AppCalendar";
-import { mapActions } from 'vuex';
+import { mapActions } from "vuex";
 export default {
   name: "AppointmentForm",
-  props: ["formDefaults","onSubmit","onReset"],
+  props: ["formDefaults", "onSubmit", "onReset"],
   data() {
     return {};
   },
@@ -65,14 +72,14 @@ export default {
     GoogleMap,
     AppCalendar,
   },
-  methods:{
-    ...mapActions(["setAppointmentUser"])
+  methods: {
+    ...mapActions(["setAppointmentUser"]),
   },
   watch: {
     formDefaults: {
       deep: true,
       handler(newValue) {
-        this.setAppointmentUser(newValue)
+        this.setAppointmentUser(newValue);
       },
     },
   },
