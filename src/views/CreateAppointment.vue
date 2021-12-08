@@ -50,15 +50,26 @@ export default {
   computed: {
     ...mapGetters(["appointmentGetter"]),
   },
-  created() {
-    let routeName = this.$route.name;
-    if (routeName === "UpdateAppointment") {
-      this.title = "Update Appointment";
-      this.submitText = "Update";
-      Object.assign(this.form, this.appointmentGetter);
-    }
+  watch: {
+    "$route.name": {
+      deep: true,
+      handler: function (name) {
+        this.setTitle(name);
+      },
+    },
   },
   methods: {
+    setTitle(name) {
+      if (name == "UpdateAppointment") {
+        this.title = "Update Appointment";
+        this.submitText = "Update";
+        Object.assign(this.form, this.appointmentGetter);
+      } else {
+        this.title = "Create New Appointment";
+        this.submitText = "Save";
+      }
+    },
+
     makeToast(title, description, variant) {
       this.$bvToast.toast(description, {
         title: title,
@@ -67,6 +78,7 @@ export default {
         solid: true,
       });
     },
+
     onSubmit() {
       let appointmentData = this.appointmentGetter;
       let vm = this;
@@ -109,9 +121,11 @@ export default {
       this.email = "";
       this.phone = null;
       this.employee = "";
-      this.addressCode = "";
+      this.address = "";
       this.date = "";
       this.time = "";
+      this.duration = "";
+      this.distance = "";
     },
   },
 };
