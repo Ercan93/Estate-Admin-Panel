@@ -1,12 +1,16 @@
 <template>
   <div class="container-fluid d-flex flex-column align-items-center">
-    <p class="col-6 display-4 mt-4">Create New Appointment</p>
+    <p class="col-6 display-4 mt-4">{{ title }}</p>
     <div class="col-9">
-      <appointment-form :onSubmit="onSubmit" :onReset="onReset" :formDefaults="form">
+      <appointment-form
+        :onSubmit="onSubmit"
+        :onReset="onReset"
+        :formDefaults="form"
+      >
         <template v-slot:submitButton>
-          <b-button type="submit" class="mr-4 mb-4" variant="success"
-            >Save</b-button
-          >
+          <b-button type="submit" class="mr-4 mb-4" variant="success">{{
+            submitText
+          }}</b-button>
         </template>
         <template v-slot:resetButton>
           <b-button type="reset" class="mb-4" variant="outline-danger"
@@ -18,20 +22,25 @@
   </div>
 </template>
 <script>
-import AppointmentForm from '@/components/AppointmentForm'
+import AppointmentForm from "@/components/AppointmentForm";
 import { mapGetters } from "vuex";
 export default {
   data() {
     return {
+      title: "Create New Appointment",
+      submitText: "Save",
       form: {
+        id: "",
         name: "",
         email: "",
         phone: null,
-        employee: '',
+        employee: "",
         employees: ["Jason D.", "Micheal F.", "Anna B.", "Tommy K."],
-        addressCode:'',
-        date:'',
-        time:'',
+        address: "",
+        date: "",
+        time: "",
+        duration: "",
+        distance: "",
       },
     };
   },
@@ -40,6 +49,14 @@ export default {
   },
   computed: {
     ...mapGetters(["appointmentGetter"]),
+  },
+  created() {
+    let routeName = this.$route.name;
+    if (routeName === "UpdateAppointment") {
+      this.title = "Update Appointment";
+      this.submitText = "Update";
+      Object.assign(this.form, this.appointmentGetter);
+    }
   },
   methods: {
     makeToast(title, description, variant) {
@@ -57,10 +74,10 @@ export default {
         [
           {
             fields: {
-              "Client": appointmentData.name,
+              Client: appointmentData.name,
               "Client Email": appointmentData.email,
               "Client Phone": appointmentData.phone,
-              "Employee": appointmentData.employee,
+              Employee: appointmentData.employee,
               "Appointment Address": appointmentData.address,
               "Appointment Date": appointmentData.date,
               "Appointment Time": appointmentData.time,
@@ -91,10 +108,10 @@ export default {
       this.name = "";
       this.email = "";
       this.phone = null;
-      this.employee = '';
-      this.addressCode ='';
-      this.date ='';
-      this.time ='';
+      this.employee = "";
+      this.addressCode = "";
+      this.date = "";
+      this.time = "";
     },
   },
 };
