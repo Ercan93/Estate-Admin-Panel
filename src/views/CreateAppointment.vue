@@ -88,14 +88,13 @@ export default {
       );
     },
     onReset() {
-      this.form.email = "";
-      this.form.name = "";
-      this.form.phone = "";
-      this.form.user = null;
-      this.form.dateTime = {
-        date : '',
-        time : ''
-      }
+      this.name = "";
+      this.email = "";
+      this.phone = null;
+      this.employee = '';
+      this.addressCode ='';
+      this.date ='';
+      this.time ='';
     },
   },
 };
