@@ -41,7 +41,7 @@ import DirectionsRenderer from "./DirectionsRenderer.js";
 import { mapActions } from "vuex";
 export default {
   name: "GoogleMap",
-  props:['address','duration','distance'],
+  props:['addressValue','durationValue','distanceValue'],
   data() {
     return {
       currentPlace: null,

@@ -48,9 +48,9 @@
     />
 
     <GoogleMap
-      :address="formDefaults.address"
-      :duration="formDefaults.duration"
-      :distance="formDefaults.distance"
+      :addressValue="formDefaults.address"
+      :durationValue="formDefaults.duration"
+      :distanceValue="formDefaults.distance"
     />
 
     <slot name="submitButton"></slot>
