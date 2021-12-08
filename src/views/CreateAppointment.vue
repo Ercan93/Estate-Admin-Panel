@@ -8,9 +8,9 @@
         :formDefaults="form"
       >
         <template v-slot:submitButton>
-          <b-button type="submit" class="mr-4 mb-4" variant="success">{{
-            submitText
-          }}</b-button>
+          <b-button type="submit" class="mr-4 mb-4" variant="success"
+            >Save</b-button
+          >
         </template>
         <template v-slot:resetButton>
           <b-button type="reset" class="mb-4" variant="outline-danger"
@@ -28,7 +28,6 @@ export default {
   data() {
     return {
       title: "Create New Appointment",
-      submitText: "Save",
       form: {
         id: "",
         name: "",
@@ -62,11 +61,9 @@ export default {
     setTitle(name) {
       if (name == "UpdateAppointment") {
         this.title = "Update Appointment";
-        this.submitText = "Update";
         Object.assign(this.form, this.appointmentGetter);
       } else {
         this.title = "Create New Appointment";
-        this.submitText = "Save";
       }
     },
 
@@ -78,27 +75,45 @@ export default {
         solid: true,
       });
     },
-
+    setApiPayload(form) {
+      let payload = {
+        fields: {
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          employee: form.employee,
+          address: form.address,
+          date: form.date,
+          time: form.time,
+          duration: form.duration,
+          distance: form.distance,
+        },
+      };
+      return payload;
+    },
     onSubmit() {
-      let appointmentData = this.appointmentGetter;
-      let vm = this;
-      this.base("Appointments").create(
-        [
-          {
-            fields: {
-              Client: appointmentData.name,
-              "Client Email": appointmentData.email,
-              "Client Phone": appointmentData.phone,
-              Employee: appointmentData.employee,
-              "Appointment Address": appointmentData.address,
-              "Appointment Date": appointmentData.date,
-              "Appointment Time": appointmentData.time,
-              "Driving Time": appointmentData.duration,
-              "Driving Distance": appointmentData.distance,
-            },
-          },
-        ],
-        function (err) {
+      let apiPayload = this.setApiPayload(this.appointmentGetter);
+      let vm = this
+      if (this.$route.name == "UpdateAppointment") {
+        apiPayload.id = this.appointmentGetter.id;
+        this.base("Appointment").update([apiPayload], function (err,records) {
+          if (err) {
+            console.error(err);
+            vm.makeToast(
+              "Opss!",
+              "Something went wrong. Please try again.",
+              "danger"
+            );
+            return;
+          }
+          vm.makeToast(
+            "Heey!",
+            "Appointment updated successfully",
+            "success"
+          );
+        });
+      } else {
+        this.base("Appointments").create([apiPayload], function (err,records) {
           if (err) {
             console.error(err);
             vm.makeToast(
@@ -113,8 +128,8 @@ export default {
             "New Appointment created successfully",
             "success"
           );
-        }
-      );
+        });
+      }
     },
     onReset() {
       this.name = "";
