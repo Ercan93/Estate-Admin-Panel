@@ -6,7 +6,7 @@ import './plugins/bootstrap-vue'
 import './plugins/axios'
 import base from './plugins/airtable'
 import * as VueGoogleMaps from 'vue2-google-maps'
-import VCalendar from 'v-calendar';
+import VCalendar from 'v-calendar'
 import 'mutationobserver-shim'
 import '@babel/polyfill'
 
@@ -16,14 +16,14 @@ Vue.prototype.base = base
 
 Vue.use(VCalendar, {
   componentPrefix: 'vc'
-});
+})
 
 Vue.use(VueGoogleMaps, {
   load: {
     key: process.env.VUE_APP_MAP_API_KEY,
-    libraries: 'places,drawing',
+    libraries: 'places,drawing'
   }
-});
+})
 
 new Vue({
   router,

@@ -14,25 +14,25 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex'
 
 export default {
-  name: "AppCalendar",
-  props: ["dateValue", "timeValue"],
-  data() {
+  name: 'AppCalendar',
+  props: ['dateValue', 'timeValue'],
+  data () {
     return {
-      date: new Date(),
-    };
+      date: new Date()
+    }
   },
   methods: {
-    ...mapActions(["setAppointmentDate"]),
+    ...mapActions(['setAppointmentDate'])
   },
   watch: {
-    date(newDate) {
-      let date = `${newDate.getDate()}/${newDate.getMonth()}/${newDate.getFullYear()}`;
-      let time = `${newDate.getHours()}:${newDate.getMinutes()}`;
-      this.setAppointmentDate({ date, time });
-    },
-  },
-};
+    date (newDate) {
+      const date = `${newDate.getDate()}/${newDate.getMonth()}/${newDate.getFullYear()}`
+      const time = `${newDate.getHours()}:${newDate.getMinutes()}`
+      this.setAppointmentDate({ date, time })
+    }
+  }
+}
 </script>

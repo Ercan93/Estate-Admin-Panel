@@ -59,29 +59,29 @@
 </template>
 
 <script>
-import GoogleMap from "@/components/maps/GoogleMap";
-import AppCalendar from "@/components/AppCalendar";
-import { mapActions } from "vuex";
+import GoogleMap from '@/components/maps/GoogleMap'
+import AppCalendar from '@/components/AppCalendar'
+import { mapActions } from 'vuex'
 export default {
-  name: "AppointmentForm",
-  props: ["formDefaults", "onSubmit", "onReset"],
-  data() {
-    return {};
+  name: 'AppointmentForm',
+  props: ['formDefaults', 'onSubmit', 'onReset'],
+  data () {
+    return {}
   },
   components: {
     GoogleMap,
-    AppCalendar,
+    AppCalendar
   },
   methods: {
-    ...mapActions(["setAppointmentUser"]),
+    ...mapActions(['setAppointmentUser'])
   },
   watch: {
     formDefaults: {
       deep: true,
-      handler(newValue) {
-        this.setAppointmentUser(newValue);
-      },
-    },
-  },
-};
+      handler (newValue) {
+        this.setAppointmentUser(newValue)
+      }
+    }
+  }
+}
 </script>

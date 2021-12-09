@@ -37,91 +37,91 @@
 </template>
 
 <script>
-import DirectionsRenderer from "./DirectionsRenderer.js";
-import { mapActions } from "vuex";
+import DirectionsRenderer from './DirectionsRenderer.js'
+import { mapActions } from 'vuex'
 export default {
-  name: "GoogleMap",
-  props:['addressValue','durationValue','distanceValue'],
-  data() {
+  name: 'GoogleMap',
+  props: ['addressValue', 'durationValue', 'distanceValue'],
+  data () {
     return {
       currentPlace: null,
       origin: {
         lat: 51.729157,
-        lng: 0.478027,
+        lng: 0.478027
       },
       destination: null,
-      duration: "0",
-      distance: "0",
+      duration: '0',
+      distance: '0',
       destinationPostcode: null,
-      proxy: "",
-    };
+      proxy: ''
+    }
   },
   components: {
-    DirectionsRenderer,
+    DirectionsRenderer
   },
-  created() {
-    this.proxy = process.env.VUE_APP_PROXY_URL;
+  created () {
+    this.proxy = process.env.VUE_APP_PROXY_URL
   },
   methods: {
-    ...mapActions(["setAppointmentAddress", "setAppointmentDistance"]),
+    ...mapActions(['setAppointmentAddress', 'setAppointmentDistance']),
 
-    setPlace(place) {
-      this.currentPlace = place;
+    setPlace (place) {
+      this.currentPlace = place
     },
 
-    getPostcode() {
-      let url = "https://api.postcodes.io/postcodes?";
-      url = `${this.proxy}${url}lon=${this.destination.lng}&lat=${this.destination.lat}`;
-      let vm = this;
-      let config = {
+    getPostcode () {
+      let url = 'https://api.postcodes.io/postcodes?'
+      url = `${this.proxy}${url}lon=${this.destination.lng}&lat=${this.destination.lat}`
+      const vm = this
+      const config = {
         url,
-        method: "GET",
-      };
+        method: 'GET'
+      }
 
       this.axios(config)
         .then((response) => {
-          vm.destinationPostcode = response.data.result[0].postcode;
-          vm.setAppointmentAddress(vm.destinationPostcode);
+          vm.destinationPostcode = response.data.result[0].postcode
+          vm.setAppointmentAddress(vm.destinationPostcode)
         })
         .catch((error) => {
-          alert(error);
-        });
+          alert(error)
+        })
     },
 
-    getDuration() {
-      let distanceURL =
-        "https://maps.googleapis.com/maps/api/distancematrix/json?";
-      let originPlaceId = "ChIJgZRHYn7p2EcRuzS6cN4ZwuM";
-      let url = `${this.proxy}${distanceURL}origins=place_id:${originPlaceId}&destinations=place_id:${this.currentPlace.place_id}&key=${process.env.VUE_APP_MAP_API_KEY}`;
-      let vm = this;
+    getDuration () {
+      const distanceURL =
+        'https://maps.googleapis.com/maps/api/distancematrix/json?'
+      const originPlaceId = 'ChIJgZRHYn7p2EcRuzS6cN4ZwuM'
+      const url = `${this.proxy}${distanceURL}origins=place_id:${originPlaceId}&destinations=place_id:${this.currentPlace.place_id}&key=${process.env.VUE_APP_MAP_API_KEY}`
+      const vm = this
       var config = {
         url,
-        method: "GET",
-      };
+        method: 'GET'
+      }
 
       this.axios(config)
         .then((response) => {
-          let elements = response.data.rows[0].elements[0];
-          vm.duration = elements.duration.text;
-          vm.distance = elements.distance.text;
+          const elements = response.data.rows[0].elements[0]
+          vm.duration = elements.duration.text
+          vm.distance = elements.distance.text
           vm.setAppointmentDistance({
             duration: vm.duration,
-            distance: vm.distance,
-          });
+            distance: vm.distance
+          })
         })
         .catch((error) => {
-          alert(error);
-        });
+          alert(error)
+        })
     },
 
-    addMarker() {
+    addMarker () {
       this.destination = {
         lat: this.currentPlace.geometry.location.lat(),
-        lng: this.currentPlace.geometry.location.lng(),
-      };
-      this.getDuration();
-      this.getPostcode();
-    },
-  },
-};
+        lng: this.currentPlace.geometry.location.lng()
+      }
+      this.getDuration()
+      this.getPostcode()
+    }
+  }
+}
 </script>

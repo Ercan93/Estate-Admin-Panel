@@ -1,10 +1,12 @@
-import { MapElementFactory } from "vue2-google-maps";
+import { MapElementFactory } from 'vue2-google-maps'
 
 export default MapElementFactory({
-  name: "directionsRenderer",
+  name: 'directionsRenderer',
 
-  ctr() {
-    return google.maps.DirectionsRenderer;
+  ctr () {
+    /* global google */
+    /* eslint no-undef: "error" */
+    return google.maps.DirectionsRenderer
   },
 
   events: [],
@@ -17,14 +19,14 @@ export default MapElementFactory({
     travelMode: { type: String }
   },
 
-  afterCreate(directionsRenderer) {
-    let directionsService = new google.maps.DirectionsService();
+  afterCreate (directionsRenderer) {
+    const directionsService = new google.maps.DirectionsService()
 
     this.$watch(
       () => [this.origin, this.destination, this.travelMode],
       () => {
-        let { origin, destination, travelMode } = this;
-        if (!origin || !destination || !travelMode) return;
+        const { origin, destination, travelMode } = this
+        if (!origin || !destination || !travelMode) return
 
         directionsService.route(
           {
@@ -33,11 +35,11 @@ export default MapElementFactory({
             travelMode
           },
           (response, status) => {
-            if (status !== "OK") return;
-            directionsRenderer.setDirections(response);
+            if (status !== 'OK') return
+            directionsRenderer.setDirections(response)
           }
-        );
+        )
       }
-    );
+    )
   }
-});
+})

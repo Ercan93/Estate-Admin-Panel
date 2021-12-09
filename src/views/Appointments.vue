@@ -34,10 +34,10 @@
   </div>
 </template>
 <script>
-import { AgGridVue } from "ag-grid-vue";
+import { AgGridVue } from 'ag-grid-vue'
 export default {
-  name: "Appointments",
-  data() {
+  name: 'Appointments',
+  data () {
     return {
       columnDefs: null,
       rowData: [],
@@ -47,94 +47,94 @@ export default {
       dateFilterParams: null,
       range: {
         start: new Date(),
-        end: new Date(),
-      },
-    };
+        end: new Date()
+      }
+    }
   },
   components: {
-    AgGridVue,
+    AgGridVue
   },
-  beforeMount() {
+  beforeMount () {
     this.columnDefs = [
-      { field: "name", sortable: true, filter: true },
-      { field: "address", sortable: true, filter: true },
+      { field: 'name', sortable: true, filter: true },
+      { field: 'address', sortable: true, filter: true },
       {
-        field: "date",
+        field: 'date',
         sortable: true,
-        filter: "agDateColumnFilter",
+        filter: 'agDateColumnFilter',
         filterParams: this.dateFilterParams,
-        suppressMenu: true,
+        suppressMenu: true
       },
-      { field: "time", sortable: true, filter: true },
-      { field: "employee", sortable: true, filter: true },
-      { field: "email", sortable: true, filter: true },
-      { field: "phone", filter: true },
-      { field: "duration", sortable: true, filter: true },
-      { field: "distance", sortable: true, filter: true },
-    ];
-    this.setRowData();
+      { field: 'time', sortable: true, filter: true },
+      { field: 'employee', sortable: true, filter: true },
+      { field: 'email', sortable: true, filter: true },
+      { field: 'phone', filter: true },
+      { field: 'duration', sortable: true, filter: true },
+      { field: 'distance', sortable: true, filter: true }
+    ]
+    this.setRowData()
   },
-  created() {
+  created () {
     this.dateFilterParams = {
       comparator: function (filterLocalDateAtMidnight, cellValue) {
-        var dateAsString = cellValue;
-        if (dateAsString == null) return -1;
-        var dateParts = dateAsString.split("/");
+        var dateAsString = cellValue
+        if (dateAsString == null) return -1
+        var dateParts = dateAsString.split('/')
         var cellDate = new Date(
           Number(dateParts[2]),
           Number(dateParts[1]) - 1,
           Number(dateParts[0])
-        );
+        )
         if (cellDate >= filterLocalDateAtMidnight) {
-          return 1;
+          return 1
         }
         if (cellDate < filterLocalDateAtMidnight) {
-          return -1;
+          return -1
         }
       },
-      browserDatePicker: true,
-    };
+      browserDatePicker: true
+    }
   },
   methods: {
-    onGridReady(params) {
-      this.gridApi = params.api;
-      this.gridColumnApi = params.columnApi;
+    onGridReady (params) {
+      this.gridApi = params.api
+      this.gridColumnApi = params.columnApi
     },
-    clearDateRange() {
-      this.gridApi.setFilterModel(null);
+    clearDateRange () {
+      this.gridApi.setFilterModel(null)
     },
-    setDateRange() {
-      let range = this.range;
-      let endDate = `${range.end.getFullYear()}-${
+    setDateRange () {
+      const range = this.range
+      const endDate = `${range.end.getFullYear()}-${
         range.end.getMonth() + 1
-      }-${range.end.getDate()}`;
+      }-${range.end.getDate()}`
 
-      let startDate = `${range.start.getFullYear()}-${
+      const startDate = `${range.start.getFullYear()}-${
         range.start.getMonth() + 1
-      }-${range.start.getDate()}`;
+      }-${range.start.getDate()}`
 
-      var dateFilterComponent = this.gridApi.getFilterInstance("date");
+      var dateFilterComponent = this.gridApi.getFilterInstance('date')
       dateFilterComponent.setModel({
         condition1: {
-          type: "lessThan",
+          type: 'lessThan',
           dateFrom: endDate,
-          dateTo: null,
+          dateTo: null
         },
-        operator: "AND",
+        operator: 'AND',
         condition2: {
-          type: "greaterThan",
+          type: 'greaterThan',
           dateFrom: startDate,
-          dateTo: null,
-        },
-      });
-      this.gridApi.onFilterChanged();
+          dateTo: null
+        }
+      })
+      this.gridApi.onFilterChanged()
     },
-    setRowData() {
-      let vm = this;
-      this.base("Appointments")
-        .select({ view: "Grid view" })
+    setRowData () {
+      const vm = this
+      this.base('Appointments')
+        .select({ view: 'Grid view' })
         .eachPage(
-          function page(records, fetchNextPage) {
+          function page (records, fetchNextPage) {
             records.forEach(function (record) {
               vm.rowData.push({
                 name: record.fields.name,
@@ -145,22 +145,21 @@ export default {
                 email: record.fields.email,
                 phone: record.fields.phone,
                 duration: record.fields.duration,
-                distance: record.fields.distance,
-              });
-            });
+                distance: record.fields.distance
+              })
+            })
             // If there are no more records, `done` will get called.
-            fetchNextPage();
+            fetchNextPage()
           },
-          function done(err) {
+          function done (err) {
             if (err) {
-              console.error(err);
-              return;
+              console.error(err)
             }
           }
-        );
-    },
-  },
-};
+        )
+    }
+  }
+}
 </script>
 
 <style lang="scss">
