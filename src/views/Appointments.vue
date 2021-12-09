@@ -1,7 +1,7 @@
 <template>
   <div id="appointments">
     <div class="d-flex flex-column align-items-center">
-      <h1 class="display-3">Appointments</h1>
+      <h1 class="display-4">Appointments</h1>
       <div class="col-11 d-flex flex-column flex-md-row align-items-center justify-content-between">
         <div
           class="d-flex flex-column flex-md-row align-items-center my-4"
@@ -42,8 +42,17 @@
           </div>
         </div>
       </div>
-
-      <div class="col-12">
+      <div class="col-10 d-flex flex-column flex-md-row align-items-center justify-content-center mb-4">
+        <p class="mb-0 h4 mr-4">Search:</p>
+        <b-form-input
+          class="col-8 py-2"
+          type="text"
+          @input="onQuickFilterChanged()"
+          id="quickFilter"
+          placeholder="client name, appointment day or anything.."
+        ></b-form-input>
+      </div>
+      <div class="col-12 mb-4">
         <ag-grid-vue
           style="height: 500px"
           class="ag-theme-alpine"
@@ -147,6 +156,9 @@ export default {
     onGridReady (params) {
       this.gridApi = params.api
       this.gridColumnApi = params.columnApi
+    },
+    onQuickFilterChanged () {
+      this.gridApi.setQuickFilter(document.getElementById('quickFilter').value)
     },
     filterClear (filteredColumn) {
       var filteredComponent = this.gridApi.getFilterInstance(filteredColumn)
