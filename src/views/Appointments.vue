@@ -1,10 +1,10 @@
 <template>
   <div id="appointments">
-    <div class="">
-      <h1>Appointments</h1>
-      <div class="d-flex flex-wrap">
+    <div class="d-flex flex-column align-items-center">
+      <h1 class="display-3">Appointments</h1>
+      <div class="col-11 d-flex flex-column flex-md-row align-items-center justify-content-between">
         <div
-          class="col-6 d-flex flex-column flex-lg-row align-items-center my-4"
+          class="d-flex flex-column flex-md-row align-items-center my-4"
         >
           <p class="mr-3 mb-0 h5">Filter Date Range:</p>
           <vc-date-picker class="my-3" v-model="range" is-range>
@@ -15,7 +15,7 @@
             </template>
           </vc-date-picker>
           <div>
-            <button class="ml-0 ml-lg-3 btn btn-success" @click="setDateRangeFilter">
+            <button class="ml-3 btn btn-success" @click="setDateRangeFilter">
               Set
             </button>
             <button class="ml-3 btn btn-outline-danger" @click="filterClear('date')">
@@ -24,7 +24,7 @@
           </div>
         </div>
         <div
-          class="col-5 d-flex flex-column flex-lg-row align-items-center my-4"
+          class="d-flex flex-column flex-md-row align-items-center my-4"
         >
           <p class="mb-0 h5 mr-4">Filter Employee:</p>
           <b-form-select
@@ -33,7 +33,7 @@
             :options="employees"
           ></b-form-select>
           <div class="d-flex">
-            <button class="ml-0 ml-lg-3 btn btn-success" @click="setEmployeeFilter">
+            <button class="ml-3 btn btn-success" @click="setEmployeeFilter">
               Set
             </button>
             <button class="ml-3 btn btn-outline-danger" @click="filterClear('employee')">
@@ -43,7 +43,7 @@
         </div>
       </div>
 
-      <div class="col-11">
+      <div class="col-12">
         <ag-grid-vue
           style="height: 500px"
           class="ag-theme-alpine"
@@ -98,7 +98,7 @@ export default {
         filterParams: this.dateFilterParams,
         suppressMenu: true
       },
-      { field: 'time', sortable: true },
+      { field: 'time' },
       {
         field: 'employee',
         filter: 'agTextColumnFilter',
