@@ -29,7 +29,7 @@ export default {
   },
   watch: {
     date(newDate) {
-      let date = `${newDate.getDate()}-${newDate.getMonth()}-${newDate.getFullYear()}`;
+      let date = `${newDate.getDate()}/${newDate.getMonth()}/${newDate.getFullYear()}`;
       let time = `${newDate.getHours()}:${newDate.getMinutes()}`;
       this.setAppointmentDate({ date, time });
     },
