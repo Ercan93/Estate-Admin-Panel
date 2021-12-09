@@ -1,20 +1,46 @@
 <template>
   <div id="appointments">
-    <div>
+    <div class="">
       <h1>Appointments</h1>
-      <div class="col-11 d-flex align-items-center my-4">
-        <p class="mr-3 mb-0 h4">Select Date Range:</p>
-        <vc-date-picker v-model="range" is-range>
-          <template v-slot="{ inputValue, inputEvents }">
-            <div class="flex justify-center items-center">
-              <input :value="inputValue.start" v-on="inputEvents.start" />
-            </div>
-          </template>
-        </vc-date-picker>
-        <button class="ml-3 btn btn-success" @click="setDateRange">Set</button>
-        <button class="ml-3 btn btn-outline-danger" @click="clearDateRange">
-          Clear
-        </button>
+      <div class="d-flex flex-wrap">
+        <div
+          class="col-6 d-flex flex-column flex-lg-row align-items-center my-4"
+        >
+          <p class="mr-3 mb-0 h5">Filter Date Range:</p>
+          <vc-date-picker class="my-3" v-model="range" is-range>
+            <template v-slot="{ inputValue, inputEvents }">
+              <div class="flex justify-center items-center">
+                <input :value="inputValue.start" v-on="inputEvents.start" />
+              </div>
+            </template>
+          </vc-date-picker>
+          <div>
+            <button class="ml-0 ml-lg-3 btn btn-success" @click="setDateRangeFilter">
+              Set
+            </button>
+            <button class="ml-3 btn btn-outline-danger" @click="clearFilter">
+              Clear
+            </button>
+          </div>
+        </div>
+        <div
+          class="col-5 d-flex flex-column flex-lg-row align-items-center my-4"
+        >
+          <p class="mb-0 h5 mr-4">Filter Employee:</p>
+          <b-form-select
+            class="my-4"
+            v-model="selectedEmployee"
+            :options="employees"
+          ></b-form-select>
+          <div class="d-flex">
+            <button class="ml-0 ml-lg-3 btn btn-success" @click="setEmployeeFilter">
+              Set
+            </button>
+            <button class="ml-3 btn btn-outline-danger" @click="clearFilter">
+              Clear
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="col-11">
@@ -45,10 +71,18 @@ export default {
       gridApi: null,
       columnApi: null,
       dateFilterParams: null,
+      employeeFilterParams: null,
       range: {
         start: new Date(),
         end: new Date()
-      }
+      },
+      employees: [
+        { value: 'Jason D.', text: 'Jason D.' },
+        { value: 'Micheal F.', text: 'Micheal F.' },
+        { value: 'Anna B.', text: 'Anna B.' },
+        { value: 'Tommy K.', text: 'Tommy K.' }
+      ],
+      selectedEmployee: null
     }
   },
   components: {
@@ -56,21 +90,25 @@ export default {
   },
   beforeMount () {
     this.columnDefs = [
-      { field: 'name', sortable: true, filter: true },
-      { field: 'address', sortable: true, filter: true },
+      { field: 'name', sortable: true },
+      { field: 'address', sortable: true },
       {
         field: 'date',
-        sortable: true,
         filter: 'agDateColumnFilter',
         filterParams: this.dateFilterParams,
         suppressMenu: true
       },
-      { field: 'time', sortable: true, filter: true },
-      { field: 'employee', sortable: true, filter: true },
-      { field: 'email', sortable: true, filter: true },
-      { field: 'phone', filter: true },
-      { field: 'duration', sortable: true, filter: true },
-      { field: 'distance', sortable: true, filter: true }
+      { field: 'time', sortable: true },
+      {
+        field: 'employee',
+        filter: 'agTextColumnFilter',
+        filterParams: this.employeeFilterParams,
+        suppressMenu: true
+      },
+      { field: 'email', sortable: true },
+      { field: 'phone' },
+      { field: 'duration', sortable: true },
+      { field: 'distance', sortable: true }
     ]
     this.setRowData()
   },
@@ -94,16 +132,32 @@ export default {
       },
       browserDatePicker: true
     }
+    this.employeeFilterParams = {
+      textCustomComparator: function (filter, value, filterText) {
+        const cellValue = value.toString()
+        if (filter === 'equals') {
+          return cellValue === filterText
+        } else {
+          return -1
+        }
+      }
+    }
   },
   methods: {
     onGridReady (params) {
       this.gridApi = params.api
       this.gridColumnApi = params.columnApi
     },
-    clearDateRange () {
+    clearFilter () {
       this.gridApi.setFilterModel(null)
     },
-    setDateRange () {
+    setEmployeeFilter () {
+      var employeeFilterComponent = this.gridApi.getFilterInstance('employee')
+      const veri = this.selectedEmployee
+      employeeFilterComponent.setModel({ type: 'equals', filter: veri })
+      this.gridApi.onFilterChanged()
+    },
+    setDateRangeFilter () {
       const range = this.range
       const endDate = `${range.end.getFullYear()}-${
         range.end.getMonth() + 1
