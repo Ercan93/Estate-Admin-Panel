@@ -18,7 +18,7 @@
             <button class="ml-0 ml-lg-3 btn btn-success" @click="setDateRangeFilter">
               Set
             </button>
-            <button class="ml-3 btn btn-outline-danger" @click="clearFilter">
+            <button class="ml-3 btn btn-outline-danger" @click="filterClear('date')">
               Clear
             </button>
           </div>
@@ -36,7 +36,7 @@
             <button class="ml-0 ml-lg-3 btn btn-success" @click="setEmployeeFilter">
               Set
             </button>
-            <button class="ml-3 btn btn-outline-danger" @click="clearFilter">
+            <button class="ml-3 btn btn-outline-danger" @click="filterClear('employee')">
               Clear
             </button>
           </div>
@@ -148,8 +148,10 @@ export default {
       this.gridApi = params.api
       this.gridColumnApi = params.columnApi
     },
-    clearFilter () {
-      this.gridApi.setFilterModel(null)
+    filterClear (filteredColumn) {
+      var filteredComponent = this.gridApi.getFilterInstance(filteredColumn)
+      filteredComponent.setModel(null)
+      this.gridApi.onFilterChanged()
     },
     setEmployeeFilter () {
       var employeeFilterComponent = this.gridApi.getFilterInstance('employee')
