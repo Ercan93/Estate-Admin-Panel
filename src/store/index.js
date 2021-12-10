@@ -22,6 +22,9 @@ export default new Vuex.Store({
   getters: {
     appointmentGetter (state) {
       return state.appointment
+    },
+    recordGetter: (state) => (id) => {
+      return state.records.find(record => record.id === id)
     }
   },
   mutations: {
@@ -41,6 +44,9 @@ export default new Vuex.Store({
     SET_APPOINTMENT_DISTANCE (state, payload) {
       state.appointment.distance = payload.distance
       state.appointment.duration = payload.duration
+    },
+    SET_RECORDS (state, payload) {
+      state.records = payload
     }
   },
   actions: {
@@ -55,6 +61,9 @@ export default new Vuex.Store({
     },
     setAppointmentDistance ({ commit }, payload) {
       commit('SET_APPOINTMENT_DISTANCE', payload)
+    },
+    setRecords ({ commit }, payload) {
+      commit('SET_RECORDS', payload)
     }
   },
   modules: {}

@@ -70,6 +70,7 @@
 </template>
 <script>
 import { AgGridVue } from 'ag-grid-vue'
+import { mapActions } from 'vuex'
 export default {
   name: 'Appointments',
   data () {
@@ -117,7 +118,7 @@ export default {
       { field: 'email', sortable: true },
       { field: 'phone' },
       { field: 'duration', sortable: true },
-      { field: 'distance', sortable: true }
+      { field: 'distance' }
     ]
     this.setRowData()
   },
@@ -153,6 +154,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['setRecords']),
     onGridReady (params) {
       this.gridApi = params.api
       this.gridColumnApi = params.columnApi
@@ -203,6 +205,7 @@ export default {
         .select({ view: 'Grid view' })
         .eachPage(
           function page (records, fetchNextPage) {
+            vm.setRecords(records)
             records.forEach(function (record) {
               vm.rowData.push({
                 name: record.fields.name,
