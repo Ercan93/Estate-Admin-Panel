@@ -23,7 +23,7 @@
 </template>
 <script>
 import AppointmentForm from '@/components/AppointmentForm'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   data () {
     return {
@@ -52,18 +52,20 @@ export default {
   watch: {
     '$route.name': {
       deep: true,
+      immediate: true,
       handler: function (name) {
         this.setTitle(name)
       }
     }
   },
   methods: {
+    ...mapActions(['setAppointment']),
     setTitle (name) {
-      if (toString(name) === 'UpdateAppointment') {
-        this.title = 'Update Appointment'
+      this.title = name
+      if (name === 'UpdateAppointment') {
         Object.assign(this.form, this.appointmentGetter)
       } else {
-        this.title = 'Create New Appointment'
+        this.onReset()
       }
     },
 
@@ -132,16 +134,24 @@ export default {
       }
     },
     onReset () {
-      this.name = ''
-      this.email = ''
-      this.phone = null
-      this.employee = ''
-      this.address = ''
-      this.date = ''
-      this.time = ''
-      this.duration = ''
-      this.distance = ''
+      this.form = {
+        id: '',
+        name: '',
+        email: '',
+        phone: null,
+        employee: '',
+        address: '',
+        date: '',
+        time: '',
+        duration: '',
+        distance: ''
+      }
     }
+  },
+  beforeRouteLeave (to, from, next) {
+    this.onReset()
+    this.setAppointment(this.form)
+    next()
   }
 }
 </script>
