@@ -28,6 +28,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    SET_APPOINTMENT (state, payload) {
+      state.appointment = payload
+    },
     SET_APPOINTMENT_USER (state, payload) {
       state.appointment.name = payload.name
       state.appointment.email = payload.email
@@ -50,6 +53,9 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    setAppointment ({ commit }, payload) {
+      commit('SET_APPOINTMENT', payload)
+    },
     setAppointmentUser ({ commit }, payload) {
       commit('SET_APPOINTMENT_USER', payload)
     },
