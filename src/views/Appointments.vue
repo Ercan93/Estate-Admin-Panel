@@ -62,6 +62,7 @@
           @grid-ready="onGridReady"
           :columnDefs="columnDefs"
           :rowData="rowData"
+          @selection-changed="onSelectionChanged"
         >
         </ag-grid-vue>
       </div>
@@ -100,6 +101,7 @@ export default {
   },
   beforeMount () {
     this.columnDefs = [
+      { field: 'id' },
       { field: 'name', sortable: true },
       { field: 'address', sortable: true },
       {
@@ -154,7 +156,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setRecords']),
+    ...mapActions(['setAppointment']),
     onGridReady (params) {
       this.gridApi = params.api
       this.gridColumnApi = params.columnApi
@@ -199,15 +201,22 @@ export default {
       })
       this.gridApi.onFilterChanged()
     },
+    onSelectionChanged () {
+      const selectedRows = this.gridApi.getSelectedRows()
+      this.setAppointment(selectedRows[0])
+      setTimeout(() => {
+        this.$router.push('/UpdateAppointment')
+      }, 500)
+    },
     setRowData () {
       const vm = this
       this.base('Appointments')
         .select({ view: 'Grid view' })
         .eachPage(
           function page (records, fetchNextPage) {
-            vm.setRecords(records)
             records.forEach(function (record) {
               vm.rowData.push({
+                id: record.id,
                 name: record.fields.name,
                 address: record.fields.address,
                 date: record.fields.date,
