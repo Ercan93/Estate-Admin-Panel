@@ -78,18 +78,9 @@ export default {
       })
     },
     setApiPayload (form) {
+      delete form.id
       const payload = {
-        fields: {
-          name: form.name,
-          email: form.email,
-          phone: form.phone,
-          employee: form.employee,
-          address: form.address,
-          date: form.date,
-          time: form.time,
-          duration: form.duration,
-          distance: form.distance
-        }
+        fields: { ...form }
       }
       return payload
     },
