@@ -7,6 +7,7 @@
         :onSubmit="onSubmit"
         :onReset="onReset"
         :formDefaults="form"
+        :employees="employees"
       >
         <!-- Save Button -->
         <template v-slot:submitButton>
@@ -40,13 +41,13 @@ export default {
         email: '',
         phone: null,
         employee: '',
-        employees: ['Jason D.', 'Micheal F.', 'Anna B.', 'Tommy K.'],
         address: '',
         date: '',
         time: '',
         duration: '',
         distance: ''
-      }
+      },
+      employees: ['Jason D.', 'Micheal F.', 'Anna B.', 'Tommy K.']
     }
   },
   components: {

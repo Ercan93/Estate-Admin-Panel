@@ -27,7 +27,7 @@
       <b-form-select
         id="input-3"
         v-model="formDefaults.employee"
-        :options="formDefaults.employees"
+        :options="employees"
         required
       ></b-form-select>
     </b-form-group>
@@ -64,7 +64,7 @@ import AppCalendar from '@/components/AppCalendar'
 import { mapActions } from 'vuex'
 export default {
   name: 'AppointmentForm',
-  props: ['formDefaults', 'onSubmit', 'onReset'],
+  props: ['formDefaults', 'employees', 'onSubmit', 'onReset'],
   data () {
     return {}
   },
