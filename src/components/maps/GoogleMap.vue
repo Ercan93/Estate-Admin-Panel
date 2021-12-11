@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     ...mapGetters(['timeGetter']),
-    ...mapActions(['setAppointmentAddress', 'setAppointmentDistance']),
+    ...mapActions(['setAppointment']),
 
     setPlace (place) {
       this.currentPlace = place
@@ -123,7 +123,7 @@ export default {
       this.axios(config)
         .then((response) => {
           vm.destinationPostcode = response.data.result[0].postcode
-          vm.setAppointmentAddress(vm.destinationPostcode)
+          vm.setAppointment({ address: vm.destinationPostcode })
         })
         .catch((error) => {
           alert(error)
@@ -147,7 +147,7 @@ export default {
           vm.duration = elements.duration.value
           vm.distance = elements.distance.text
           vm.setLeavingAndArrivalTime()
-          vm.setAppointmentDistance({
+          vm.setAppointment({
             duration: vm.duration,
             distance: vm.distance
           })

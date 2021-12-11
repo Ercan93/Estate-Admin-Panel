@@ -25,13 +25,13 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setAppointmentDate'])
+    ...mapActions(['setAppointment'])
   },
   watch: {
     date (newDate) {
       const date = `${newDate.getDate()}/${newDate.getMonth()}/${newDate.getFullYear()}`
       const time = `${newDate.getHours()}:${newDate.getMinutes()}`
-      this.setAppointmentDate({ date, time })
+      this.setAppointment({ date, time })
     }
   }
 }
