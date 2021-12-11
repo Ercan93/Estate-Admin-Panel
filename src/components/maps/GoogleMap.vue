@@ -32,13 +32,15 @@
       <p class="h4 mr-5 font-weight-bolder">DRIVING</p>
       <p class="h5 mr-5">Duration: {{ duration }}</p>
       <p class="h5 mr-5">Distance: {{ distance }}</p>
+      <p class="h5 mr-5">Leaving: {{ leaving }}</p>
+      <p class="h5 mr-5">Arrival: {{ arrival }}</p>
     </b-alert>
   </div>
 </template>
 
 <script>
 import DirectionsRenderer from './DirectionsRenderer.js'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'GoogleMap',
   props: ['addressValue', 'durationValue', 'distanceValue'],
@@ -55,6 +57,8 @@ export default {
       destination: null,
       duration: '0',
       distance: '0',
+      leaving: '',
+      arrival: '',
       destinationPostcode: null,
       proxy: ''
     }
@@ -77,12 +81,36 @@ export default {
     this.proxy = process.env.VUE_APP_PROXY_URL
   },
   methods: {
+    ...mapGetters(['timeGetter']),
     ...mapActions(['setAppointmentAddress', 'setAppointmentDistance']),
 
     setPlace (place) {
       this.currentPlace = place
     },
+    setLeavingAndArrivalTime () {
+      var appointmentTime = this.timeGetter()
+      appointmentTime = appointmentTime.split(':')
+      // appointmentTime ==> [hour, minute]
+      const totalMinute = parseInt(appointmentTime[0] * 60) + parseInt(appointmentTime[1])
+      const totalDrivingMinutes = parseInt(this.duration / 60)
 
+      const leavingTheOffice = totalMinute - totalDrivingMinutes
+      const arrivalAtTheOffice = totalMinute + 60 + totalDrivingMinutes
+
+      const leavingHour = leavingTheOffice / 60
+      let leavingMinute = leavingTheOffice % 60
+
+      const arrivalHour = arrivalAtTheOffice / 60
+      let arrivalMinute = arrivalAtTheOffice % 60
+
+      this.duration = `${parseInt(totalDrivingMinutes / 60)} hour ${parseInt(totalDrivingMinutes % 60)} minute`
+
+      if (leavingMinute < 10) leavingMinute = '0' + leavingMinute
+      if (arrivalMinute < 10) arrivalMinute = '0' + arrivalMinute
+
+      this.leaving = leavingHour + ':' + leavingMinute
+      this.arrival = arrivalHour + ':' + arrivalMinute
+    },
     getPostcode () {
       let url = 'https://api.postcodes.io/postcodes?'
       url = `${this.proxy}${url}lon=${this.destination.lng}&lat=${this.destination.lat}`
@@ -118,6 +146,7 @@ export default {
           const elements = response.data.rows[0].elements[0]
           vm.duration = elements.duration.value
           vm.distance = elements.distance.text
+          vm.setLeavingAndArrivalTime()
           vm.setAppointmentDistance({
             duration: vm.duration,
             distance: vm.distance

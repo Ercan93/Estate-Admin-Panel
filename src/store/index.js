@@ -16,10 +16,15 @@ export default new Vuex.Store({
       date: '',
       time: '',
       duration: '',
-      distance: ''
+      distance: '',
+      leaving: '',
+      arrival: ''
     }
   },
   getters: {
+    timeGetter (state) {
+      return state.appointment.time
+    },
     appointmentGetter (state) {
       return state.appointment
     },
