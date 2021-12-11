@@ -3,6 +3,7 @@
     <div class="d-flex flex-column align-items-center">
       <h1 class="display-4">Appointments</h1>
       <div class="col-11 d-flex flex-column flex-md-row align-items-center justify-content-between">
+        <!-- Date Range Calendar Component -->
         <div
           class="d-flex flex-column flex-md-row align-items-center my-4"
         >
@@ -23,6 +24,9 @@
             </button>
           </div>
         </div>
+        <!-- End of Date Range Calendar Component -->
+
+        <!-- Employee Filter Component -->
         <div
           class="d-flex flex-column flex-md-row align-items-center my-4"
         >
@@ -41,7 +45,9 @@
             </button>
           </div>
         </div>
+        <!-- End of Employee Filter Component -->
       </div>
+      <!-- Quick Search Component -->
       <div class="col-10 d-flex flex-column flex-md-row align-items-center justify-content-center mb-4">
         <p class="mb-0 h4 mr-4">Search:</p>
         <b-form-input
@@ -52,6 +58,9 @@
           placeholder="client name, appointment day or anything.."
         ></b-form-input>
       </div>
+      <!-- End of Quick Search Component -->
+
+      <!-- Appointments Table Component -->
       <div class="col-12 mb-4">
         <ag-grid-vue
           style="height: 500px"
@@ -66,6 +75,7 @@
         >
         </ag-grid-vue>
       </div>
+      <!-- Appointments Table Component -->
     </div>
   </div>
 </template>
@@ -100,6 +110,7 @@ export default {
     AgGridVue
   },
   beforeMount () {
+    // <------------ Define Grid column Value ------------>
     this.columnDefs = [
       { field: 'id' },
       { field: 'name', sortable: true },
@@ -122,6 +133,9 @@ export default {
       { field: 'duration', sortable: true },
       { field: 'distance' }
     ]
+    // <------------ End of Define Grid column Value ------------>
+
+    // call setRowData for get appointments data from API
     this.setRowData()
   },
   created () {
@@ -157,24 +171,45 @@ export default {
   },
   methods: {
     ...mapActions(['setAppointment']),
+
+    // standard AgGrid definition
     onGridReady (params) {
       this.gridApi = params.api
       this.gridColumnApi = params.columnApi
     },
+
+    /**
+     * @description quickly filters the table.
+     */
     onQuickFilterChanged () {
       this.gridApi.setQuickFilter(document.getElementById('quickFilter').value)
     },
+
+    /**
+     * @description It removes that filter from
+     * the table according to the filteredColumn parameter.
+     * @param {String} filteredColumn - any column name
+     */
     filterClear (filteredColumn) {
       var filteredComponent = this.gridApi.getFilterInstance(filteredColumn)
       filteredComponent.setModel(null)
       this.gridApi.onFilterChanged()
     },
+
+    /**
+     * @description Filters the table based on the selected employee name.
+     */
     setEmployeeFilter () {
       var employeeFilterComponent = this.gridApi.getFilterInstance('employee')
-      const veri = this.selectedEmployee
-      employeeFilterComponent.setModel({ type: 'equals', filter: veri })
+      const employeeName = this.selectedEmployee
+      employeeFilterComponent.setModel({ type: 'equals', filter: employeeName })
       this.gridApi.onFilterChanged()
     },
+
+    /**
+     * @description Applies date filtering to the table
+     * by editing the date layout.
+     */
     setDateRangeFilter () {
       const range = this.range
       const endDate = `${range.end.getFullYear()}-${
@@ -201,13 +236,24 @@ export default {
       })
       this.gridApi.onFilterChanged()
     },
+
+    /**
+     * @description redirects to the update page to edit
+     * the selected appointment.
+     */
     onSelectionChanged () {
       const selectedRows = this.gridApi.getSelectedRows()
+      // sends the data to be updated to the store
       this.setAppointment(selectedRows[0])
       setTimeout(() => {
         this.$router.push('/UpdateAppointment')
       }, 500)
     },
+
+    /**
+     * @description get appointments data from Airtable server with API
+     * and ad to agGrid table
+     */
     setRowData () {
       const vm = this
       this.base('Appointments')
@@ -215,6 +261,7 @@ export default {
         .eachPage(
           function page (records, fetchNextPage) {
             records.forEach(function (record) {
+              // add record to AgGrid table in order
               vm.rowData.push({
                 id: record.id,
                 name: record.fields.name,
