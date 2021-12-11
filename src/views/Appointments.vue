@@ -69,9 +69,9 @@
           :animateRows="true"
           rowSelection="single"
           @grid-ready="onGridReady"
+          @cell-clicked="editAppointment"
           :columnDefs="columnDefs"
           :rowData="rowData"
-          @selection-changed="onSelectionChanged"
         >
         </ag-grid-vue>
       </div>
@@ -112,26 +112,36 @@ export default {
   beforeMount () {
     // <------------ Define Grid column Value ------------>
     this.columnDefs = [
-      { field: 'id' },
-      { field: 'name', sortable: true },
-      { field: 'address', sortable: true },
       {
-        field: 'date',
-        filter: 'agDateColumnFilter',
-        filterParams: this.dateFilterParams,
-        suppressMenu: true
+        headerName: '',
+        field: 'id',
+        valueFormatter: function () {
+          return 'Edit'
+        }
       },
-      { field: 'time' },
+      { headerName: 'Client Name', field: 'name', sortable: true },
       {
+        headerName: 'Employee',
         field: 'employee',
         filter: 'agTextColumnFilter',
         filterParams: this.employeeFilterParams,
         suppressMenu: true
       },
-      { field: 'email', sortable: true },
-      { field: 'phone' },
-      { field: 'duration', sortable: true },
-      { field: 'distance' }
+      { headerName: 'Post code', field: 'address' },
+      { headerName: 'Email', field: 'email' },
+      { headerName: 'Client Phone', field: 'phone' },
+      {
+        headerName: 'Date',
+        field: 'date',
+        filter: 'agDateColumnFilter',
+        filterParams: this.dateFilterParams,
+        suppressMenu: true
+      },
+      { headerName: 'Appointment Time', field: 'time' },
+      { headerName: 'Driving Duration', field: 'duration' },
+      { headerName: 'Leaving the Office', field: 'leaving' },
+      { headerName: 'Arrival at the Office', field: 'arrival' },
+      { headerName: 'Distance', field: 'distance' }
     ]
     // <------------ End of Define Grid column Value ------------>
 
@@ -241,13 +251,14 @@ export default {
      * @description redirects to the update page to edit
      * the selected appointment.
      */
-    onSelectionChanged () {
-      const selectedRows = this.gridApi.getSelectedRows()
-      // sends the data to be updated to the store
-      this.setAppointment(selectedRows[0])
-      setTimeout(() => {
-        this.$router.push('/UpdateAppointment')
-      }, 500)
+    editAppointment (event) {
+      if (event.colDef.field === 'id') {
+        // sends the data to be updated to the store
+        this.setAppointment(event.data)
+        setTimeout(() => {
+          this.$router.push('/UpdateAppointment')
+        }, 300)
+      }
     },
 
     /**
@@ -265,13 +276,15 @@ export default {
               vm.rowData.push({
                 id: record.id,
                 name: record.fields.name,
-                address: record.fields.address,
-                date: record.fields.date,
-                time: record.fields.time,
                 employee: record.fields.employee,
+                address: record.fields.address,
                 email: record.fields.email,
                 phone: record.fields.phone,
+                date: record.fields.date,
+                time: record.fields.time,
                 duration: record.fields.duration,
+                leaving: record.fields.leaving,
+                arrival: record.fields.arrival,
                 distance: record.fields.distance
               })
             })
