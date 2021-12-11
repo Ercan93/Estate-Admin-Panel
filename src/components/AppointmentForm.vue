@@ -73,13 +73,19 @@ export default {
     AppCalendar
   },
   methods: {
-    ...mapActions(['setAppointmentUser'])
+    ...mapActions(['setAppointment'])
   },
   watch: {
     formDefaults: {
       deep: true,
       handler (newValue) {
-        this.setAppointmentUser(newValue)
+        const clientData = {
+          name: newValue.name,
+          email: newValue.email,
+          employee: newValue.employee,
+          phone: newValue.phone
+        }
+        this.setAppointment(clientData)
       }
     }
   }
