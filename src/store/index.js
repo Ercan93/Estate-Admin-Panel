@@ -29,13 +29,8 @@ export default new Vuex.Store({
   },
   mutations: {
     SET_APPOINTMENT (state, payload) {
+      payload = Object.assign(state.appointment, payload)
       state.appointment = payload
-    },
-    SET_APPOINTMENT_USER (state, payload) {
-      state.appointment.name = payload.name
-      state.appointment.email = payload.email
-      state.appointment.employee = payload.employee
-      state.appointment.phone = payload.phone
     },
     SET_APPOINTMENT_ADDRESS (state, payload) {
       state.appointment.address = payload
@@ -55,9 +50,6 @@ export default new Vuex.Store({
   actions: {
     setAppointment ({ commit }, payload) {
       commit('SET_APPOINTMENT', payload)
-    },
-    setAppointmentUser ({ commit }, payload) {
-      commit('SET_APPOINTMENT_USER', payload)
     },
     setAppointmentAddress ({ commit }, payload) {
       commit('SET_APPOINTMENT_ADDRESS', payload)
