@@ -5,7 +5,7 @@
       <div class="d-flex flex-wrap justify-content-between">
         <GmapAutocomplete
           class="col-12 col-lg-10 mt-1"
-          @place_changed="setPlace"
+          @place_changed="setCurrentPlace"
         />
         <button
           class="col-3 col-lg-2 btn btn-secondary mt-1"
@@ -84,7 +84,7 @@ export default {
     ...mapGetters(['timeGetter']),
     ...mapActions(['setAppointment']),
 
-    setPlace (place) {
+    setCurrentPlace (place) {
       this.currentPlace = place
     },
     setLeavingAndArrivalTime () {
@@ -97,10 +97,10 @@ export default {
       const leavingTheOffice = totalMinute - totalDrivingMinutes
       const arrivalAtTheOffice = totalMinute + 60 + totalDrivingMinutes
 
-      const leavingHour = leavingTheOffice / 60
+      const leavingHour = parseInt(leavingTheOffice / 60)
       let leavingMinute = leavingTheOffice % 60
 
-      const arrivalHour = arrivalAtTheOffice / 60
+      const arrivalHour = parseInt(arrivalAtTheOffice / 60)
       let arrivalMinute = arrivalAtTheOffice % 60
 
       this.duration = `${parseInt(totalDrivingMinutes / 60)} hour ${parseInt(totalDrivingMinutes % 60)} minute`
