@@ -28,10 +28,14 @@ export default {
     ...mapActions(['setAppointment'])
   },
   watch: {
-    date (newDate) {
-      const date = `${newDate.getDate()}/${newDate.getMonth()}/${newDate.getFullYear()}`
-      const time = `${newDate.getHours()}:${newDate.getMinutes()}`
-      this.setAppointment({ date, time })
+    date: {
+      immediate: true,
+      deep: true,
+      handler (newDate) {
+        const date = `${newDate.getDate()}/${newDate.getMonth()}/${newDate.getFullYear()}`
+        const time = `${newDate.getHours()}:${newDate.getMinutes()}`
+        this.setAppointment({ date, time })
+      }
     }
   }
 }
