@@ -110,6 +110,7 @@ export default {
 
       this.leaving = leavingHour + ':' + leavingMinute
       this.arrival = arrivalHour + ':' + arrivalMinute
+      this.setAppointment({ leaving: this.leaving, arrival: this.arrival })
     },
     getPostcode () {
       let url = 'https://api.postcodes.io/postcodes?'
