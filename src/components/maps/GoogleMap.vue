@@ -42,6 +42,9 @@ import { mapActions } from 'vuex'
 export default {
   name: 'GoogleMap',
   props: ['addressValue', 'durationValue', 'distanceValue'],
+  components: {
+    DirectionsRenderer
+  },
   data () {
     return {
       currentPlace: null,
@@ -56,8 +59,19 @@ export default {
       proxy: ''
     }
   },
-  components: {
-    DirectionsRenderer
+  watch: {
+    durationValue: {
+      immediate: true,
+      handler (value) {
+        this.duration = value
+      }
+    },
+    distanceValue: {
+      immediate: true,
+      handler (value) {
+        this.distance = value
+      }
+    }
   },
   created () {
     this.proxy = process.env.VUE_APP_PROXY_URL
@@ -102,7 +116,7 @@ export default {
       this.axios(config)
         .then((response) => {
           const elements = response.data.rows[0].elements[0]
-          vm.duration = elements.duration.text
+          vm.duration = elements.duration.value
           vm.distance = elements.distance.text
           vm.setAppointmentDistance({
             duration: vm.duration,
