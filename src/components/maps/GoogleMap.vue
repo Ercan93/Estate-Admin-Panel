@@ -8,7 +8,7 @@
           @place_changed="setCurrentPlace"
         />
         <button
-          class="col-3 col-lg-2 btn btn-secondary mt-1"
+          class="col-3 col-lg-2 btn btn-success mt-1"
           type="button"
           @click.prevent="addMarker"
         >

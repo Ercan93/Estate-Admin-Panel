@@ -1,6 +1,6 @@
 <template>
-  <div class="container-fluid d-flex flex-column align-items-center">
-    <p class="col-6 display-4 mt-4">{{ title }}</p>
+  <div class="container-fluid d-flex flex-column align-items-center mt-5">
+    <h1 class="col-10 col-md-5 mt-4">{{ title }}</h1>
     <div class="col-9">
       <!-- Appointment Form -->
       <appointment-form
@@ -68,10 +68,11 @@ export default {
   methods: {
     ...mapActions(['setAppointment']),
     setTitle (name) {
-      this.title = name
       if (name === 'UpdateAppointment') {
+        this.title = 'Update Appointment'
         Object.assign(this.form, this.appointmentGetter)
       } else {
+        this.title = 'Create Appointment'
         this.onReset()
       }
     },

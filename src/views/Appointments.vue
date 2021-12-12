@@ -1,8 +1,28 @@
 <template>
   <div id="appointments">
     <div class="d-flex flex-column align-items-center">
-      <h1 class="display-4">Appointments</h1>
-      <div class="col-11 d-flex flex-column flex-md-row align-items-center justify-content-between">
+      <h1 class="mt-5 pt-5">Appointments</h1>
+      <div class="col-10 d-flex flex-column flex-md-row align-items-center justify-content-between">
+        <!-- Employee Filter Component -->
+        <div
+          class="d-flex flex-column flex-md-row align-items-center my-4"
+        >
+          <p class="mb-0 h5 mr-4">Filter Employee:</p>
+          <b-form-select
+            class="my-4"
+            v-model="selectedEmployee"
+            :options="employees"
+          ></b-form-select>
+          <div class="d-flex">
+            <button class="ml-3 btn btn-success" @click="setEmployeeFilter">
+              Set
+            </button>
+            <button class="ml-3 btn btn-outline-danger" @click="filterClear('employee')">
+              Clear
+            </button>
+          </div>
+        </div>
+        <!-- End of Employee Filter Component -->
         <!-- Date Range Calendar Component -->
         <div
           class="d-flex flex-column flex-md-row align-items-center my-4"
@@ -25,27 +45,6 @@
           </div>
         </div>
         <!-- End of Date Range Calendar Component -->
-
-        <!-- Employee Filter Component -->
-        <div
-          class="d-flex flex-column flex-md-row align-items-center my-4"
-        >
-          <p class="mb-0 h5 mr-4">Filter Employee:</p>
-          <b-form-select
-            class="my-4"
-            v-model="selectedEmployee"
-            :options="employees"
-          ></b-form-select>
-          <div class="d-flex">
-            <button class="ml-3 btn btn-success" @click="setEmployeeFilter">
-              Set
-            </button>
-            <button class="ml-3 btn btn-outline-danger" @click="filterClear('employee')">
-              Clear
-            </button>
-          </div>
-        </div>
-        <!-- End of Employee Filter Component -->
       </div>
       <!-- Quick Search Component -->
       <div class="col-10 d-flex flex-column flex-md-row align-items-center justify-content-center mb-4">
@@ -116,7 +115,7 @@ export default {
       {
         headerName: '',
         field: 'id',
-        width: 65,
+        width: 75,
         valueFormatter: function () {
           return 'Edit'
         },
@@ -342,9 +341,11 @@ export default {
 @import "~ag-grid-community/dist/styles/ag-grid.css";
 @import "~ag-grid-community/dist/styles/ag-theme-alpine.css";
 
+.ag-theme-alpine {
+  font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+}
 .edit-cell-btn {
   background-color: #20c997;
-  border-radius: 5px;
   color: #fff;
   font-weight: bold;
 }
