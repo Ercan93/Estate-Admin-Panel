@@ -139,16 +139,6 @@ export default {
       },
       { headerName: 'Client Name', field: 'name', sortable: true },
       {
-        headerName: 'Employee',
-        field: 'employee',
-        filter: 'agTextColumnFilter',
-        filterParams: this.employeeFilterParams,
-        suppressMenu: true
-      },
-      { headerName: 'Post code', field: 'address' },
-      { headerName: 'Email', field: 'email' },
-      { headerName: 'Client Phone', field: 'phone' },
-      {
         headerName: 'Date',
         field: 'date',
         filter: 'agDateColumnFilter',
@@ -158,6 +148,16 @@ export default {
         unSortIcon: true,
         suppressMenu: true
       },
+      {
+        headerName: 'Employee',
+        field: 'employee',
+        filter: 'agTextColumnFilter',
+        filterParams: this.employeeFilterParams,
+        suppressMenu: true
+      },
+      { headerName: 'Post code', field: 'address' },
+      { headerName: 'Email', field: 'email' },
+      { headerName: 'Client Phone', field: 'phone' },
       { headerName: 'Appointment Time', field: 'time' },
       { headerName: 'Driving Duration', field: 'duration' },
       { headerName: 'Leaving the Office', field: 'leaving' },
