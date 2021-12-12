@@ -55,6 +55,7 @@ export default {
         lng: 0.478027
       },
       destination: null,
+      tempDestination: null,
       duration: '0',
       distance: '0',
       leaving: '',
@@ -114,7 +115,7 @@ export default {
     },
     getPostcode () {
       let url = 'https://api.postcodes.io/postcodes?'
-      url = `${this.proxy}${url}lon=${this.destination.lng}&lat=${this.destination.lat}`
+      url = `${this.proxy}${url}lon=${this.tempDestination.lng}&lat=${this.tempDestination.lat}`
       const vm = this
       const config = {
         url,
@@ -125,9 +126,17 @@ export default {
         .then((response) => {
           vm.destinationPostcode = response.data.result[0].postcode
           vm.setAppointment({ address: vm.destinationPostcode })
+          vm.destination = vm.tempDestination
+          vm.getDuration()
         })
         .catch((error) => {
-          alert(error)
+          this.$bvToast.toast('Address postcode not found.', {
+            title: 'Opss!',
+            variant: 'danger',
+            toaster: 'b-toaster-top-full',
+            solid: true
+          })
+          console.log(error)
         })
     },
 
@@ -159,11 +168,10 @@ export default {
     },
 
     addMarker () {
-      this.destination = {
+      this.tempDestination = {
         lat: this.currentPlace.geometry.location.lat(),
         lng: this.currentPlace.geometry.location.lng()
       }
-      this.getDuration()
       this.getPostcode()
     }
   }
