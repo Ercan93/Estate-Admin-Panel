@@ -32,7 +32,7 @@ export default {
       immediate: true,
       deep: true,
       handler (newDate) {
-        const date = `${newDate.getDate()}/${newDate.getMonth()}/${newDate.getFullYear()}`
+        const date = `${newDate.getDate()}/${newDate.getMonth() + 1}/${newDate.getFullYear()}`
         const time = `${newDate.getHours()}:${newDate.getMinutes()}`
         this.setAppointment({ date, time })
       }

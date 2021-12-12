@@ -115,8 +115,25 @@ export default {
       {
         headerName: '',
         field: 'id',
+        width: 65,
         valueFormatter: function () {
           return 'Edit'
+        },
+        cellClass: function (params) {
+          var cellDateAsString = params.data.date
+          if (cellDateAsString == null) return 'edit-cell-btn-disabled'
+          var cellDateParts = cellDateAsString.split('/')
+          var todayDate = new Date()
+          var cellDate = new Date(
+            Number(cellDateParts[2]),
+            Number(cellDateParts[1]) - 1,
+            Number(cellDateParts[0])
+          )
+          if (cellDate >= todayDate) {
+            return 'edit-cell-btn'
+          } else {
+            return 'edit-cell-btn-disabled'
+          }
         }
       },
       { headerName: 'Client Name', field: 'name', sortable: true },
@@ -302,7 +319,21 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="css">
 @import "~ag-grid-community/dist/styles/ag-grid.css";
 @import "~ag-grid-community/dist/styles/ag-theme-alpine.css";
+
+.edit-cell-btn {
+  background-color: #20c997;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: bold;
+}
+.edit-cell-btn:hover{
+  cursor: pointer;
+}
+.edit-cell-btn-disabled {
+  pointer-events: none;
+  opacity: 0.4;
+}
 </style>
