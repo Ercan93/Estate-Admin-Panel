@@ -93,6 +93,7 @@ export default {
       columnApi: null,
       dateFilterParams: null,
       employeeFilterParams: null,
+      dateComparator: null,
       range: {
         start: new Date(),
         end: new Date()
@@ -152,6 +153,9 @@ export default {
         field: 'date',
         filter: 'agDateColumnFilter',
         filterParams: this.dateFilterParams,
+        sortable: true,
+        comparator: this.dateComparator,
+        unSortIcon: true,
         suppressMenu: true
       },
       { headerName: 'Appointment Time', field: 'time' },
@@ -194,6 +198,21 @@ export default {
           return -1
         }
       }
+    }
+    this.dateComparator = function dateComparator (date1, date2) {
+      let dateA = date1.split('/')
+      let dateB = date2.split('/')
+      dateA = new Date(
+        Number(dateA[2]),
+        Number(dateA[1]) - 1,
+        Number(dateA[0])
+      )
+      dateB = new Date(
+        Number(dateB[2]),
+        Number(dateB[1]) - 1,
+        Number(dateB[0])
+      )
+      return dateA - dateB
     }
   },
   methods: {
