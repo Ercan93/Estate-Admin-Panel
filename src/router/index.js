@@ -20,7 +20,14 @@ const routes = [
   {
     path: '/UpdateAppointment',
     name: 'UpdateAppointment',
-    component: CreateAppointment
+    component: CreateAppointment,
+    beforeEnter: (to, from, next) => {
+      if (from.name === 'Appointments') {
+        next()
+      } else {
+        next('/Appointments')
+      }
+    }
   },
   {
     path: '/Appointments',
