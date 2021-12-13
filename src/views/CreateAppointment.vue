@@ -34,7 +34,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   data () {
     return {
-      title: 'Create New Appointment',
+      title: 'Create Appointment',
       form: {
         id: '',
         name: '',
@@ -87,13 +87,13 @@ export default {
       })
     },
     setApiPayload (form) {
-      delete form.id
-      const payload = {
+      var payload = {
         fields: { ...form }
       }
       return payload
     },
-    createAppointment (apiPayload, vm) {
+    createAppointment (apiPayload) {
+      var vm = this
       this.base('Appointments').create([apiPayload], function (err, records) {
         if (err) {
           console.error(err)
@@ -111,8 +111,9 @@ export default {
         )
       })
     },
-    updateAppointment (apiPayload, vm) {
-      this.base('Appointment').update([apiPayload], function (err, records) {
+    updateAppointment (apiPayload) {
+      var vm = this
+      this.base('Appointments').update([apiPayload], function (err, records) {
         if (err) {
           console.error(err)
           vm.makeToast(
@@ -130,13 +131,13 @@ export default {
       })
     },
     onSubmit () {
-      const apiPayload = this.setApiPayload(this.appointmentGetter)
-      const vm = this
-      if (toString(this.$route.name) === 'UpdateAppointment') {
+      var apiPayload = this.setApiPayload(this.appointmentGetter)
+      delete apiPayload.fields.id
+      if (this.title === 'Update Appointment') {
         apiPayload.id = this.appointmentGetter.id
-        vm.updateAppointment(apiPayload, vm)
+        this.updateAppointment(apiPayload)
       } else {
-        vm.createAppointment(apiPayload, vm)
+        this.createAppointment(apiPayload)
       }
     },
     onReset () {
@@ -150,7 +151,9 @@ export default {
         date: '',
         time: '',
         duration: '',
-        distance: ''
+        distance: '',
+        leaving: '',
+        arrival: ''
       }
     }
   },
