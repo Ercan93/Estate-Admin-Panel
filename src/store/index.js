@@ -24,6 +24,9 @@ export default new Vuex.Store({
     timeGetter (state) {
       return state.appointment.time
     },
+    addressGetter (state) {
+      return state.appointment.address
+    },
     appointmentGetter (state) {
       return state.appointment
     }
