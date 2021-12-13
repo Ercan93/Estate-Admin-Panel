@@ -45,7 +45,9 @@ export default {
         date: '',
         time: '',
         duration: '',
-        distance: ''
+        distance: '',
+        leaving: '',
+        arrival: ''
       },
       employees: ['Jason D.', 'Micheal F.', 'Anna B.', 'Tommy K.']
     }

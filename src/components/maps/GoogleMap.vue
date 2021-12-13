@@ -29,7 +29,7 @@ import DirectionsRenderer from './DirectionsRenderer.js'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'GoogleMap',
-  props: ['addressValue', 'durationValue', 'distanceValue'],
+  props: ['defaultValues'],
   components: {
     DirectionsRenderer
   },
@@ -50,16 +50,13 @@ export default {
     }
   },
   watch: {
-    durationValue: {
+    defaultValues: {
       immediate: true,
       handler (value) {
-        this.duration = value
-      }
-    },
-    distanceValue: {
-      immediate: true,
-      handler (value) {
-        this.distance = value
+        this.duration = value.duration
+        this.distance = value.distance
+        this.leaving = value.leaving
+        this.arrival = value.arrival
       }
     }
   },

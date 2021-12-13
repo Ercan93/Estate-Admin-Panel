@@ -48,9 +48,13 @@
     />
 
     <GoogleMap
-      :addressValue="formDefaults.address"
-      :durationValue="formDefaults.duration"
-      :distanceValue="formDefaults.distance"
+      :defaultValues="{
+        address: formDefaults.address,
+        duration: formDefaults.duration,
+        distance: formDefaults.distance,
+        leaving: formDefaults.leaving,
+        arrival: formDefaults.arrival,
+      }"
     />
 
     <slot name="submitButton"></slot>
