@@ -3,7 +3,7 @@
     <div>
       <h4>Select Location</h4>
     </div>
-    <GmapMap :center="origin" @click="onMapClick" :zoom="12" style="width: 100%; height: 400px">
+    <GmapMap :center="origin" @click="onMapClick" :zoom="15" style="width: 100%; height: 400px">
       <DirectionsRenderer
         travelMode="DRIVING"
         :origin="origin"

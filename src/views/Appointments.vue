@@ -14,7 +14,7 @@
             :options="employees"
           ></b-form-select>
           <div class="d-flex">
-            <button class="ml-3 btn btn-success" @click="setEmployeeFilter">
+            <button class="ml-0 ml-md-3 btn btn-success" @click="setEmployeeFilter">
               Set
             </button>
             <button class="ml-3 btn btn-outline-danger" @click="filterClear('employee')">
@@ -36,7 +36,7 @@
             </template>
           </vc-date-picker>
           <div>
-            <button class="ml-3 btn btn-success" @click="setDateRangeFilter">
+            <button class="ml-0 ml-md-3 btn btn-success" @click="setDateRangeFilter">
               Set
             </button>
             <button class="ml-3 btn btn-outline-danger" @click="filterClear('date')">
