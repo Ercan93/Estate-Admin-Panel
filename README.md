@@ -1,4 +1,15 @@
-# iceberg-case
+# Iceberg Estate Panel
+
+### Live
+https://estate-panel.netlify.app/
+
+## Requirements
+To run locally, create an .env file and copy the variables 
+from the .env-example file to the .env file.
+The keys you must have are described below.
+- AirTable API key
+- Google Maps API key
+- Proxy URL
 
 ## Project setup
 ```
@@ -14,6 +25,3 @@ npm run serve
 ```
 npm run build
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
