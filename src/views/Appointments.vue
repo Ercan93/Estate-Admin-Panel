@@ -2,7 +2,7 @@
   <div id="appointments">
     <div class="d-flex flex-column align-items-center">
       <h1 class="mt-5 pt-5">Appointments</h1>
-      <div class="col-10 d-flex flex-column flex-md-row align-items-center justify-content-between">
+      <div class="col-12 col-lg-10 d-flex flex-column flex-lg-row align-items-center justify-content-between">
         <!-- Employee Filter Component -->
         <div
           class="d-flex flex-column flex-md-row align-items-center my-4"
