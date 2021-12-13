@@ -28,6 +28,25 @@ export default {
     ...mapActions(['setAppointment'])
   },
   watch: {
+    dateValue: {
+      immediate: true,
+      handler (updateDateValue) {
+        const value = updateDateValue.split('/')
+        this.date.setFullYear(
+          parseInt(value[2]),
+          parseInt(value[1]) - 1,
+          parseInt(value[0])
+        )
+      }
+    },
+    timeValue: {
+      immediate: true,
+      handler (updateTimeValue) {
+        const value = updateTimeValue.split(':')
+        this.date.setHours(parseInt(value[0]))
+        this.date.setMinutes(parseInt(value[1]))
+      }
+    },
     date: {
       immediate: true,
       deep: true,
