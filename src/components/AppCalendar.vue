@@ -31,6 +31,7 @@ export default {
     dateValue: {
       immediate: true,
       handler (updateDateValue) {
+        if (updateDateValue.length < 1) return
         const value = updateDateValue.split('/')
         this.date.setFullYear(
           parseInt(value[2]),
@@ -42,6 +43,7 @@ export default {
     timeValue: {
       immediate: true,
       handler (updateTimeValue) {
+        if (updateTimeValue.length < 1) return
         const value = updateTimeValue.split(':')
         this.date.setHours(parseInt(value[0]))
         this.date.setMinutes(parseInt(value[1]))
