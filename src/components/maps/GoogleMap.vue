@@ -67,6 +67,11 @@ export default {
     ...mapGetters(['timeGetter']),
     ...mapActions(['setAppointment']),
 
+    /**
+     * @description After taking the appointment time and converting
+     * it to minutes, it sets the time of leaving from the office
+     * and the time of arrival at the office.
+     */
     setLeavingAndArrivalTime () {
       var appointmentTime = this.timeGetter()
       appointmentTime = appointmentTime.split(':')
@@ -92,6 +97,43 @@ export default {
       this.arrival = arrivalHour + ':' + arrivalMinute
       this.setAppointment({ leaving: this.leaving, arrival: this.arrival })
     },
+
+    /**
+     * @description It determines the distance and duration based
+     * on the coordinate values of the two locations and calls
+     * the setLeavingAndArrivalTime function if duration and distance are available.
+     */
+    getDuration () {
+      const distanceURL =
+        'https://maps.googleapis.com/maps/api/distancematrix/json?'
+      const url = `${this.proxy}${distanceURL}origins=${this.origin.lat},${this.origin.lng}&destinations=${this.destination.lat},${this.destination.lng}&key=${process.env.VUE_APP_MAP_API_KEY}`
+      var vm = this
+      var config = {
+        url,
+        method: 'GET'
+      }
+
+      this.axios(config)
+        .then((response) => {
+          const elements = response.data.rows[0].elements[0]
+          vm.duration = elements.duration.value
+          vm.distance = elements.distance.text
+          vm.setLeavingAndArrivalTime()
+          vm.setAppointment({
+            duration: vm.duration,
+            distance: vm.distance
+          })
+        })
+        .catch((error) => {
+          alert(error)
+        })
+    },
+
+    /**
+     * @description It checks whether there is a post code
+     * according to the location information selected from the map,
+     * and calls the getDuration function if the postcode is available.
+     */
     getPostcode () {
       let url = 'https://api.postcodes.io/postcodes?'
       url = `${this.proxy}${url}lon=${this.tempDestination.lng}&lat=${this.tempDestination.lat}`
@@ -119,32 +161,12 @@ export default {
         })
     },
 
-    getDuration () {
-      const distanceURL =
-        'https://maps.googleapis.com/maps/api/distancematrix/json?'
-      const url = `${this.proxy}${distanceURL}origins=${this.origin.lat},${this.origin.lng}&destinations=${this.destination.lat},${this.destination.lng}&key=${process.env.VUE_APP_MAP_API_KEY}`
-      var vm = this
-      var config = {
-        url,
-        method: 'GET'
-      }
-
-      this.axios(config)
-        .then((response) => {
-          const elements = response.data.rows[0].elements[0]
-          vm.duration = elements.duration.value
-          vm.distance = elements.distance.text
-          vm.setLeavingAndArrivalTime()
-          vm.setAppointment({
-            duration: vm.duration,
-            distance: vm.distance
-          })
-        })
-        .catch((error) => {
-          alert(error)
-        })
-    },
-
+    /**
+     * @description It works when clicking any point
+     * on the map and gets the coordinate values of the point
+     * and call getPostcode function.
+     * @param {Object} event
+     */
     onMapClick (event) {
       this.tempDestination = {
         lat: event.latLng.lat(),

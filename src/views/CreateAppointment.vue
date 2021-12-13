@@ -69,6 +69,12 @@ export default {
   },
   methods: {
     ...mapActions(['setAppointment']),
+
+    /**
+     * @description It runs when the router changes
+     * and sets the form data according to the router name.
+     * @param {String} name
+     */
     setTitle (name) {
       if (name === 'UpdateAppointment') {
         this.title = 'Update Appointment'
@@ -78,6 +84,13 @@ export default {
         this.onReset()
       }
     },
+
+    /**
+     * @description bootstrap toast function
+     * @param {String} title
+     * @param {String} description
+     * @param {String} variant
+     */
     makeToast (title, description, variant) {
       this.$bvToast.toast(description, {
         title: title,
@@ -86,12 +99,25 @@ export default {
         solid: true
       })
     },
+
+    /**
+     * @description It makes the data given as
+     * a parameter ready for sending to the API.
+     * @param {Object} form
+     * @return {Object}
+     */
     setApiPayload (form) {
       var payload = {
         fields: { ...form }
       }
       return payload
     },
+
+    /**
+     * @description It creates a new appointment data
+     * by sending the data given as a parameter to the API.
+     * @param {Object} apiPayload
+     */
     createAppointment (apiPayload) {
       var vm = this
       this.base('Appointments').create([apiPayload], function (err, records) {
@@ -111,6 +137,12 @@ export default {
         )
       })
     },
+
+    /**
+     * @description It updates the current appointment
+     * by sending the data given as a parameter to the API.
+     * @param {Object} appointment
+     */
     updateAppointment (apiPayload) {
       var vm = this
       this.base('Appointments').update([apiPayload], function (err, records) {
@@ -130,6 +162,11 @@ export default {
         )
       })
     },
+
+    /**
+     * @description it runs when the form is approved and calls the update
+     * or create appointment function based on the title variable.
+     */
     onSubmit () {
       var apiPayload = this.setApiPayload(this.appointmentGetter)
       delete apiPayload.fields.id
@@ -143,6 +180,10 @@ export default {
         this.$router.push('/Appointments')
       }, 2000)
     },
+
+    /**
+     * @description Resets the entire form value.
+     */
     onReset () {
       this.form = {
         id: '',
@@ -160,6 +201,13 @@ export default {
       }
     }
   },
+  /**
+   * @description It calls the onReset
+   * function and resets the data in the Store.
+   * @param {String} to
+   * @param {String} from
+   * @param {Function} next
+   */
   beforeRouteLeave (to, from, next) {
     this.onReset()
     this.setAppointment(this.form)

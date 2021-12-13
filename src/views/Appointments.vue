@@ -169,6 +169,9 @@ export default {
     this.setRowData()
   },
   created () {
+    /**
+     *@description Filters data based on the given date range.
+     */
     this.dateFilterParams = {
       comparator: function (filterLocalDateAtMidnight, cellValue) {
         var dateAsString = cellValue
@@ -188,6 +191,10 @@ export default {
       },
       browserDatePicker: true
     }
+
+    /**
+     * @description Filters data based on given employee name.
+     */
     this.employeeFilterParams = {
       textCustomComparator: function (filter, value, filterText) {
         const cellValue = value.toString()
@@ -198,6 +205,10 @@ export default {
         }
       }
     }
+
+    /**
+     * @description Sorts by date data.
+     */
     this.dateComparator = function dateComparator (date1, date2) {
       let dateA = date1.split('/')
       let dateB = date2.split('/')
@@ -217,7 +228,10 @@ export default {
   methods: {
     ...mapActions(['setAppointment']),
 
-    // standard AgGrid definition
+    /**
+     * @description standard AgGrid definition
+     * @param {Object} params
+     */
     onGridReady (params) {
       this.gridApi = params.api
       this.gridColumnApi = params.columnApi
@@ -285,6 +299,7 @@ export default {
     /**
      * @description redirects to the update page to edit
      * the selected appointment.
+     * @param {Objcet} event
      */
     editAppointment (event) {
       if (event.colDef.field === 'id') {
