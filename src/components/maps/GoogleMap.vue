@@ -133,7 +133,7 @@ export default {
       this.axios(config)
         .then((response) => {
           const elements = response.data.rows[0].elements[0]
-          vm.duration = elements.duration.value
+          vm.duration = elements.duration.value + 60
           vm.distance = elements.distance.text
           vm.setLeavingAndArrivalTime()
           vm.setAppointment({
