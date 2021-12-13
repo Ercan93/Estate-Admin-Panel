@@ -87,6 +87,21 @@ export default {
     ...mapActions(['setAppointment']),
 
     /**
+     * @description bootstrap toast function
+     * @param {String} title
+     * @param {String} description
+     * @param {String} variant
+     */
+    makeToast (title, description, variant) {
+      this.$bvToast.toast(description, {
+        title: title,
+        variant: variant,
+        toaster: 'b-toaster-top-full',
+        solid: true
+      })
+    },
+
+    /**
      * @description After taking the appointment time and converting
      * it to minutes, it sets the time of leaving from the office
      * and the time of arrival at the office.
@@ -166,12 +181,7 @@ export default {
           vm.getDuration()
         })
         .catch((error) => {
-          this.$bvToast.toast('Address not found.', {
-            title: 'Opss!',
-            variant: 'danger',
-            toaster: 'b-toaster-top-full',
-            solid: true
-          })
+          vm.makeToast('Opss!', 'Address not found.', 'danger')
           console.log(error)
         })
     },
@@ -187,23 +197,14 @@ export default {
         method: 'GET'
       }
       var result = false
+      var vm = this
       await this.axios(config)
         .then((response) => {
-          this.$bvToast.toast('Postcode is correct.', {
-            title: 'Heey!',
-            variant: 'success',
-            toaster: 'b-toaster-top-full',
-            solid: true
-          })
+          vm.makeToast('Heey!', 'Postcode is correct.', 'success')
           result = true
         })
         .catch((error) => {
-          this.$bvToast.toast('Invalid postcode!', {
-            title: 'Opss!',
-            variant: 'danger',
-            toaster: 'b-toaster-top-full',
-            solid: true
-          })
+          vm.makeToast('Opss!', 'Invalid postcode!', 'danger')
           console.log(error)
           result = false
         })
@@ -211,8 +212,8 @@ export default {
     },
 
     /**
-     * @description It works when clicking any point on 
-     * the map and gets the coordinate values of the point 
+     * @description It works when clicking any point on
+     * the map and gets the coordinate values of the point
      * first checks the postcode then calls the addressControl function.
      * @param {Object} event
      */
