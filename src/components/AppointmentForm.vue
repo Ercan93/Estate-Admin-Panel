@@ -42,6 +42,15 @@
       ></b-form-input>
     </b-form-group>
 
+    <b-form-group id="input-group-5" label="Postcode:" label-for="input-5">
+      <b-form-input
+        id="input-5"
+        v-model="formDefaults.address"
+        placeholder="cm27pj"
+        required
+      ></b-form-input>
+    </b-form-group>
+
     <AppCalendar
       :dateValue="formDefaults.date"
       :timeValue="formDefaults.time"
@@ -49,7 +58,6 @@
 
     <GoogleMap
       :defaultValues="{
-        address: formDefaults.address,
         duration: formDefaults.duration,
         distance: formDefaults.distance,
         leaving: formDefaults.leaving,
@@ -87,7 +95,8 @@ export default {
           name: newValue.name,
           email: newValue.email,
           employee: newValue.employee,
-          phone: newValue.phone
+          phone: newValue.phone,
+          address: newValue.address
         }
         this.setAppointment(clientData)
       }

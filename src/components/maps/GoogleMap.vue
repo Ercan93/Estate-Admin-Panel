@@ -45,7 +45,6 @@ export default {
       distance: '0',
       leaving: '',
       arrival: '',
-      destinationPostcode: null,
       time: '',
       proxy: ''
     }
@@ -80,7 +79,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentTime: 'timeGetter'
+      currentTime: 'timeGetter',
+      postcode: 'addressGetter'
     })
   },
   methods: {
@@ -151,7 +151,7 @@ export default {
      * according to the location information selected from the map,
      * and calls the getDuration function if the postcode is available.
      */
-    getPostcode () {
+    addressControl () {
       let url = 'https://api.postcodes.io/postcodes?'
       url = `${this.proxy}${url}lon=${this.tempDestination.lng}&lat=${this.tempDestination.lat}`
       var vm = this
@@ -162,13 +162,11 @@ export default {
 
       this.axios(config)
         .then((response) => {
-          vm.destinationPostcode = response.data.result[0].postcode
-          vm.setAppointment({ address: vm.destinationPostcode })
           vm.destination = vm.tempDestination
           vm.getDuration()
         })
         .catch((error) => {
-          this.$bvToast.toast('Address postcode not found.', {
+          this.$bvToast.toast('Address not found.', {
             title: 'Opss!',
             variant: 'danger',
             toaster: 'b-toaster-top-full',
@@ -179,9 +177,43 @@ export default {
     },
 
     /**
-     * @description It works when clicking any point
-     * on the map and gets the coordinate values of the point
-     * and call getPostcode function.
+     * @description Checks that the postcode is registered in United Kingdom.
+     * @return {Boolean}
+     */
+    async checkPostcode () {
+      const url = `${this.proxy}https://api.postcodes.io/postcodes/${this.postcode}`
+      const config = {
+        url,
+        method: 'GET'
+      }
+      var result = false
+      await this.axios(config)
+        .then((response) => {
+          this.$bvToast.toast('Postcode is correct.', {
+            title: 'Heey!',
+            variant: 'success',
+            toaster: 'b-toaster-top-full',
+            solid: true
+          })
+          result = true
+        })
+        .catch((error) => {
+          this.$bvToast.toast('Invalid postcode!', {
+            title: 'Opss!',
+            variant: 'danger',
+            toaster: 'b-toaster-top-full',
+            solid: true
+          })
+          console.log(error)
+          result = false
+        })
+      return result
+    },
+
+    /**
+     * @description It works when clicking any point on 
+     * the map and gets the coordinate values of the point 
+     * first checks the postcode then calls the addressControl function.
      * @param {Object} event
      */
     onMapClick (event) {
@@ -189,7 +221,9 @@ export default {
         lat: event.latLng.lat(),
         lng: event.latLng.lng()
       }
-      this.getPostcode()
+      this.checkPostcode().then(result => {
+        this.addressControl()
+      })
     }
   }
 }
