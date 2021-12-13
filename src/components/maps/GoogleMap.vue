@@ -1,23 +1,9 @@
 <template>
   <div class="container mx-0 px-0">
     <div>
-      <h4>Search Location</h4>
-      <div class="d-flex flex-wrap justify-content-between">
-        <GmapAutocomplete
-          class="col-12 col-lg-10 mt-1"
-          @place_changed="setCurrentPlace"
-        />
-        <button
-          class="col-3 col-lg-2 btn btn-success mt-1"
-          type="button"
-          @click.prevent="addMarker"
-        >
-          Add
-        </button>
-      </div>
+      <h4>Select Location</h4>
     </div>
-    <br />
-    <GmapMap :center="origin" :zoom="12" style="width: 100%; height: 400px">
+    <GmapMap :center="origin" @click="onMapClick" :zoom="12" style="width: 100%; height: 400px">
       <DirectionsRenderer
         travelMode="DRIVING"
         :origin="origin"
@@ -49,7 +35,6 @@ export default {
   },
   data () {
     return {
-      currentPlace: null,
       origin: {
         lat: 51.729157,
         lng: 0.478027
@@ -85,9 +70,6 @@ export default {
     ...mapGetters(['timeGetter']),
     ...mapActions(['setAppointment']),
 
-    setCurrentPlace (place) {
-      this.currentPlace = place
-    },
     setLeavingAndArrivalTime () {
       var appointmentTime = this.timeGetter()
       appointmentTime = appointmentTime.split(':')
@@ -116,7 +98,7 @@ export default {
     getPostcode () {
       let url = 'https://api.postcodes.io/postcodes?'
       url = `${this.proxy}${url}lon=${this.tempDestination.lng}&lat=${this.tempDestination.lat}`
-      const vm = this
+      var vm = this
       const config = {
         url,
         method: 'GET'
@@ -143,9 +125,8 @@ export default {
     getDuration () {
       const distanceURL =
         'https://maps.googleapis.com/maps/api/distancematrix/json?'
-      const originPlaceId = 'ChIJgZRHYn7p2EcRuzS6cN4ZwuM'
-      const url = `${this.proxy}${distanceURL}origins=place_id:${originPlaceId}&destinations=place_id:${this.currentPlace.place_id}&key=${process.env.VUE_APP_MAP_API_KEY}`
-      const vm = this
+      const url = `${this.proxy}${distanceURL}origins=${this.origin.lat},${this.origin.lng}&destinations=${this.destination.lat},${this.destination.lng}&key=${process.env.VUE_APP_MAP_API_KEY}`
+      var vm = this
       var config = {
         url,
         method: 'GET'
@@ -167,10 +148,10 @@ export default {
         })
     },
 
-    addMarker () {
+    onMapClick (event) {
       this.tempDestination = {
-        lat: this.currentPlace.geometry.location.lat(),
-        lng: this.currentPlace.geometry.location.lng()
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng()
       }
       this.getPostcode()
     }
