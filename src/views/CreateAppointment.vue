@@ -139,6 +139,9 @@ export default {
       } else {
         this.createAppointment(apiPayload)
       }
+      setTimeout(() => {
+        this.$router.push('/Appointments')
+      }, 2000)
     },
     onReset () {
       this.form = {

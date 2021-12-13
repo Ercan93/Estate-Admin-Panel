@@ -1,6 +1,6 @@
 <template>
   <div class="my-4">
-    <p>Select Date and Time:</p>
+    <h4>Select Date and Time:</h4>
     <vc-date-picker v-model="date" mode="dateTime" is24hr>
       <template v-slot="{ inputValue, inputEvents }">
         <input

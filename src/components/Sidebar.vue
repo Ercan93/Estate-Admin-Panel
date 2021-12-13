@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-button class="m-4 fixed-top btn-info" v-b-toggle.sidebar-1>Menu</b-button>
-    <b-sidebar id="sidebar-1" title="Iceberg Estates" :no-header-close="false" :visible="true">
+    <b-sidebar id="sidebar-1" title="Iceberg Estates" :no-header-close="false" :visible="false">
       <div class="px-3 py-2">
         <div>
             <b-nav vertical>
