@@ -138,7 +138,7 @@ export default {
       },
       { headerName: 'Client Name', field: 'name', sortable: true },
       {
-        headerName: 'Date',
+        headerName: 'Sort by date',
         field: 'date',
         filter: 'agDateColumnFilter',
         filterParams: this.dateFilterParams,
