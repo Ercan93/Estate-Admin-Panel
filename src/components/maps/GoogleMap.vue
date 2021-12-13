@@ -16,7 +16,7 @@
       show
     >
       <p class="h4 mr-5 font-weight-bolder">DRIVING</p>
-      <p class="h5 mr-5">Duration: {{ duration }}</p>
+      <p class="h5 mr-5">Duration: {{ durationString }}</p>
       <p class="h5 mr-5">Distance: {{ distance }}</p>
       <p class="h5 mr-5">Leaving: {{ leaving }}</p>
       <p class="h5 mr-5">Arrival: {{ arrival }}</p>
@@ -64,7 +64,13 @@ export default {
       immediate: true,
       handler (value) {
         this.time = value
-        if (this.destination) this.getPostcode()
+        if (this.duration) this.setLeavingAndArrivalTime()
+      }
+    },
+    duration: {
+      immediate: true,
+      handler (value) {
+        this.durationString = parseInt(value / 3600) + ' hour ' + parseInt(value % 60) + ' minutes'
       }
     }
   },
@@ -99,8 +105,6 @@ export default {
 
       const arrivalHour = parseInt(arrivalAtTheOffice / 60)
       let arrivalMinute = arrivalAtTheOffice % 60
-
-      this.duration = `${parseInt(totalDrivingMinutes / 60)} hour ${parseInt(totalDrivingMinutes % 60)} minute`
 
       if (leavingMinute < 10) leavingMinute = '0' + leavingMinute
       if (arrivalMinute < 10) arrivalMinute = '0' + arrivalMinute

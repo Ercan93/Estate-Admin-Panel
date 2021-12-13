@@ -158,7 +158,14 @@ export default {
       { headerName: 'Email', field: 'email' },
       { headerName: 'Client Phone', field: 'phone' },
       { headerName: 'Appointment Time', field: 'time' },
-      { headerName: 'Driving Duration', field: 'duration' },
+      {
+        headerName: 'Driving Duration',
+        field: 'duration',
+        valueFormatter: function (param) {
+          const durationString = parseInt(param.value / 3600) + ' hour ' + parseInt(param.value % 60) + ' minutes'
+          return durationString
+        }
+      },
       { headerName: 'Leaving the Office', field: 'leaving' },
       { headerName: 'Arrival at the Office', field: 'arrival' },
       { headerName: 'Distance', field: 'distance' }
