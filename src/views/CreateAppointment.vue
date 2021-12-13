@@ -128,13 +128,14 @@ export default {
             'Something went wrong. Please try again.',
             'danger'
           )
-          return
+          return false
         }
         vm.makeToast(
           'Heey!',
           'New Appointment created successfully',
           'success'
         )
+        return true
       })
     },
 
@@ -153,13 +154,14 @@ export default {
             'Something went wrong. Please try again.',
             'danger'
           )
-          return
+          return false
         }
         vm.makeToast(
           'Heey!',
           'Appointment updated successfully',
           'success'
         )
+        return true
       })
     },
 
@@ -170,15 +172,18 @@ export default {
     onSubmit () {
       var apiPayload = this.setApiPayload(this.appointmentGetter)
       delete apiPayload.fields.id
+      let result = false
       if (this.title === 'Update Appointment') {
         apiPayload.id = this.appointmentGetter.id
-        this.updateAppointment(apiPayload)
+        result = this.updateAppointment(apiPayload)
       } else {
-        this.createAppointment(apiPayload)
+        result = this.createAppointment(apiPayload)
       }
-      setTimeout(() => {
-        this.$router.push('/Appointments')
-      }, 2000)
+      if (result) {
+        setTimeout(() => {
+          this.$router.push('/Appointments')
+        }, 2000)
+      }
     },
 
     /**
