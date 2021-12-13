@@ -46,6 +46,7 @@ export default {
       leaving: '',
       arrival: '',
       destinationPostcode: null,
+      time: '',
       proxy: ''
     }
   },
@@ -58,13 +59,24 @@ export default {
         this.leaving = value.leaving
         this.arrival = value.arrival
       }
+    },
+    currentTime: {
+      immediate: true,
+      handler (value) {
+        this.time = value
+        if (this.destination) this.getPostcode()
+      }
     }
   },
   created () {
     this.proxy = process.env.VUE_APP_PROXY_URL
   },
+  computed: {
+    ...mapGetters({
+      currentTime: 'timeGetter'
+    })
+  },
   methods: {
-    ...mapGetters(['timeGetter']),
     ...mapActions(['setAppointment']),
 
     /**
@@ -73,7 +85,7 @@ export default {
      * and the time of arrival at the office.
      */
     setLeavingAndArrivalTime () {
-      var appointmentTime = this.timeGetter()
+      var appointmentTime = this.time
       appointmentTime = appointmentTime.split(':')
       // appointmentTime ==> [hour, minute]
       const totalMinute = parseInt(appointmentTime[0] * 60) + parseInt(appointmentTime[1])
