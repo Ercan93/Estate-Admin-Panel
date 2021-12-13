@@ -162,7 +162,8 @@ export default {
         headerName: 'Driving Duration',
         field: 'duration',
         valueFormatter: function (param) {
-          const durationString = parseInt(param.value / 3600) + ' hour ' + parseInt(param.value % 60) + ' minutes'
+          const value = parseInt(param.value / 60)
+          const durationString = parseInt(value / 60) + ' hour ' + parseInt(value % 60) + ' minutes'
           return durationString
         }
       },

@@ -70,7 +70,8 @@ export default {
     duration: {
       immediate: true,
       handler (value) {
-        this.durationString = parseInt(value / 3600) + ' hour ' + parseInt(value % 60) + ' minutes'
+        value = parseInt(value / 60)
+        this.durationString = parseInt(value / 60) + ' hour ' + parseInt(value % 60) + ' minutes'
       }
     }
   },
